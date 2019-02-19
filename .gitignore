@@ -1,3 +1,6 @@
 # Ignore obj & bin
 */bin/**
 */obj/**
+
+# Ignore .vscode
+.vscode/**
