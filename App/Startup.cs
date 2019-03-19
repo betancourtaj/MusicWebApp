@@ -50,7 +50,9 @@ namespace App
                 app.UseHsts();
             }
 
-            string constring = "User Id=V00811876;Password=V00811876;" + "Data Source=128.172.188.107:1521/xe";
+            string constring = @"User Id=V00811876;
+                                Password=V00811876;
+                                Data Source=128.172.188.107:1521/xe";
 
             using(OracleConnection con = new OracleConnection(constring))
             {
@@ -72,7 +74,7 @@ namespace App
                         }
 
                         reader.Dispose();
-                    } catch (Exception ex)
+                    } catch (OracleException ex)
                     {
                         Console.WriteLine($"ORACLE EXCEPTION: {ex.Message}");
                     }
