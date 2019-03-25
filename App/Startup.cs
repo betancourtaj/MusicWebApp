@@ -50,9 +50,7 @@ namespace App
                 app.UseHsts();
             }
 
-            string constring = "User Id=V00811876;Password=V00811876;Data Source=128.172.188.107:1521/xe";
-
-            using(OracleConnection con = new OracleConnection(constring))
+            /*using(OracleConnection con = new OracleConnection(constring))
             {
                 using(OracleCommand command = con.CreateCommand())
                 {
@@ -77,7 +75,7 @@ namespace App
                         Console.WriteLine($"ORACLE EXCEPTION: {ex.Message}");
                     }
                 }
-            }
+            } */
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

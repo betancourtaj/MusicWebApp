@@ -4,3 +4,6 @@
 
 # Ignore .vscode
 .vscode/**
+
+# Ignore login file
+login
