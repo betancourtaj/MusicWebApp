@@ -1,0 +1,23 @@
+﻿@page
+@model App.Pages.AddSongModel
+@{
+    ViewData["Title"] = "Add a song!";
+}
+<section id = "main">
+    <div id="add side" style="width: 500px; height: 1200px;float:left; padding: 10px; ">
+        <h1>Add Song</h1>
+        <input type="text" placeholder="Title"></textarea>
+        <input type="text" placeholder="Album"></textarea>
+        <input type="text" placeholder="Artist"></textarea>
+        <input type="text" placeholder="Date"></textarea>
+        <button id="submitbutton" runat="server" OnClick=@App.Pages.AddSongModel.OnSubmitButtonClick()>Submit</button>
+    </div>
+
+    <div id="search side" style="width: 500px; height: 1200px;float:right; padding: 10px; ">
+        <h1>Search Song</h1>
+        <input type="text" placeholder="Title"></textarea>
+        <input type="text" placeholder="Album"></textarea>
+        <input type="text" placeholder="Artist"></textarea>
+        <input type="text" placeholder="Date"></textarea>
+    </div>
+</section>
