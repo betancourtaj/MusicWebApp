@@ -11,13 +11,31 @@ namespace App.Pages
     {
         public void OnGet()
         {
+            RedirectToPage("Pages/Index.cshtml");
         }
 
-        
-        public IActionResult OnSubmitButtonClick()
+        [HttpPost]
+        public IActionResult OnPostSubmitButton()
         {
-            Console.WriteLine("hello world!");
-            return null;
+            Console.WriteLine("Hello from OnPostSubmitButton!");
+            return RedirectToPage("./Index");
         }
+
+        [HttpPost]
+        public IActionResult OnPostGetSearchText(int id, string searchString)
+        {
+            Console.WriteLine($"REQUESTED: {Request.Form["searchString"]}");
+            return Page();
+        }
+
+/*
+        [HttpPost]
+        public IActionResult OnPost()
+        {
+            Console.WriteLine("Hello from OnPost!");
+            return RedirectToPage("./Index");
+        }
+
+         */
     }
 }
