@@ -15,6 +15,7 @@ namespace App
         public static void Main(string[] args)
         {
             CreateWebHostBuilder(args).Build().Run();
+            Console.WriteLine("END");
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>

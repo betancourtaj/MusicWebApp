@@ -6,4 +6,4 @@
 .vscode/**
 
 # Ignore login file
-login
+ConnectionFile

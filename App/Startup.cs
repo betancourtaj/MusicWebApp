@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Oracle.ManagedDataAccess.Client;
 
 namespace App
 {
@@ -50,32 +49,7 @@ namespace App
                 app.UseHsts();
             }
 
-            /*using(OracleConnection con = new OracleConnection(constring))
-            {
-                using(OracleCommand command = con.CreateCommand())
-                {
-                    try {
-                        con.Open();
-                        command.BindByName = true;
-
-                        command.CommandText = "select first_name from employees where department_id = :id";
-
-                        OracleParameter id = new OracleParameter("id", 50);
-                        command.Parameters.Add(id);
-
-                        OracleDataReader reader = command.ExecuteReader();
-                        while(reader.Read())
-                        {
-                            Console.WriteLine(reader.GetString(0));
-                        }
-
-                        reader.Dispose();
-                    } catch (OracleException ex)
-                    {
-                        Console.WriteLine($"ORACLE EXCEPTION: {ex.Message}");
-                    }
-                }
-            } */
+            Constants.Generate();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

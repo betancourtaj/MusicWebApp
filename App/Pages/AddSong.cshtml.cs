@@ -14,14 +14,16 @@ namespace App.Pages
             RedirectToPage("Pages/Index.cshtml");
         }
 
-        [HttpPost]
         public IActionResult OnPostSubmitButton()
         {
+            MusicDataBase.Connect();
+            MusicDataBase.Generic();
+            MusicDataBase.Close();
+            
             Console.WriteLine("Hello from OnPostSubmitButton!");
             return RedirectToPage("./Index");
         }
 
-        [HttpPost]
         public IActionResult OnPostGetSearchText(int id, string searchString)
         {
             Console.WriteLine($"REQUESTED: {Request.Form["searchString"]}");
