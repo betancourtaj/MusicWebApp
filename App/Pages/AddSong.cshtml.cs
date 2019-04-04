@@ -11,6 +11,18 @@ namespace App.Pages
 {
     public class AddSongModel : PageModel
     {
+        [BindProperty]
+        public DateTime songDate { get; set; }
+        [BindProperty]
+        public string songTitle { get; set; }
+        [BindProperty]
+        public string songArtist { get; set; }
+        [BindProperty]
+        public string songAlbum { get; set; }
+        [BindProperty]
+        public double songLength { get; set; }
+
+
         public void OnGet()
         {
             RedirectToPage("Pages/Index.cshtml");
@@ -27,8 +39,12 @@ namespace App.Pages
             //MusicDataBase.Connect();
             //MusicDataBase.SearchSong(song);
             //MusicDataBase.Close();
-            // TODO: Figure me out.
-            Console.WriteLine($"Date: {Request.Form["date-input"].ToString()}");
+
+            Console.WriteLine($"Date: {songDate}");
+            Console.WriteLine($"Title: {songTitle}");
+            Console.WriteLine($"Album: {songAlbum}");
+            Console.WriteLine($"Artist: {songArtist}");
+            Console.WriteLine($"Length: {songLength}");
             
             return RedirectToPage("./Index");
         }

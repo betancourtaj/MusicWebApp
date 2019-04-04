@@ -6,13 +6,26 @@
 <section id = "main">
     <div class="left-floating-div" id="add-song-div">
         <h1>Add Song</h1>
-        <input type="text" placeholder="Title" id="title-input"/>
+        @using (Html.BeginForm("OnPostSubmitButton", "AddSongModel", FormMethod.Post))
+        {
+            <div>
+                @Html.TextBoxFor(Model => Model.songTitle, new { @type = "text"})
+                @Html.TextBoxFor(Model => Model.songAlbum, new { @type = "text"})
+                @Html.TextBoxFor(Model => Model.songArtist, new { @type = "text"})
+                @Html.TextBoxFor(Model => Model.songLength, new { @type = "text"})
+                @Html.EditorFor(Model => Model.songDate, "{0:yyyy-MM-dd}", new { @type = "date" })
+                <input type="submit" asp-page-handler="SubmitButton" value="Submit"/>
+            </div>
+        }
+    </div>
+</section>
+
+<!--
+    <input type="text" placeholder="Title" id="title-input"/>
         <input type="text" placeholder="Album" id="album-input"/>
         <input type="text" placeholder="Artist" id="artist-input"/>
         <input type="text" placeholder="Length" id="length-input"/>
-        <asp-input type="date" id="date-input" style="margin: 8px;"/>
+        @Html.TextAreaFor(AddSongModel => AddSongModel.songDate, new { @type = "date"})
         <form method="post">
             <button type="submit" asp-page-handler="SubmitButton">Submit</button>
-        </form>
-    </div>
-</section>
+        </form>-->
