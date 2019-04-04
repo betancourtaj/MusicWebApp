@@ -49,8 +49,6 @@ namespace App
                 app.UseHsts();
             }
 
-            Constants.Generate();
-
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();

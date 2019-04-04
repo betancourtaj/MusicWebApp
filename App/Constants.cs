@@ -8,7 +8,7 @@ namespace App
     {
         public static string ConnectionString { get; set; }
 
-        public static void Generate()
+        static Constants()
         {
             byte[] bytes = File.ReadAllBytes("ConnectionFile");
 

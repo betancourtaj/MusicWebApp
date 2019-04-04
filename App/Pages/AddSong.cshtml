@@ -4,12 +4,13 @@
     ViewData["Title"] = "Add a song!";
 }
 <section id = "main">
-    <div id="add side" style="width: 500px; height: 1200px;float:left; padding: 10px; ">
+    <div class="left-floating-div" id="add-song-div">
         <h1>Add Song</h1>
-        <input type="text" placeholder="Title"/>
-        <input type="text" placeholder="Album"/>
-        <input type="text" placeholder="Artist"/>
-        <input type="text" placeholder="Date"/>
+        <input type="text" placeholder="Title" id="title-input"/>
+        <input type="text" placeholder="Album" id="album-input"/>
+        <input type="text" placeholder="Artist" id="artist-input"/>
+        <input type="text" placeholder="Length" id="length-input"/>
+        <asp-input type="date" id="date-input" style="margin: 8px;"/>
         <form method="post">
             <button type="submit" asp-page-handler="SubmitButton">Submit</button>
         </form>

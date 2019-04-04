@@ -14,16 +14,32 @@ namespace App
             connection = new OracleConnection(Constants.ConnectionString);
         }
 
-        public static void AddSongCommand(Song song) {            
+        public static void SearchSong(Song song)
+        {
             OracleCommand command = connection.CreateCommand();
             try {
                 connection.Open();
                 command.BindByName = true;
 
-                command.CommandText = "insert into pr_songs :song";
+                command.CommandText = @"select s.title
+                                        from p_songs
+                                        where s.title = :title and
+                                              s.album = :album and
+                                              s.artist = :artist and 
+                                              s.date = :date and 
+                                              s.length = :length;";
 
-                OracleParameter songParameter = new OracleParameter("song", song);
-                command.Parameters.Add(songParameter);
+                OracleParameter title = new OracleParameter("title", song.Title);
+                OracleParameter album = new OracleParameter("album", song.Album);
+                OracleParameter artist = new OracleParameter("artist", song.Artist);
+                OracleParameter date = new OracleParameter("date", song.Date);
+                OracleParameter length = new OracleParameter("length", song.Length);
+
+                command.Parameters.Add(title);
+                command.Parameters.Add(album);
+                command.Parameters.Add(artist);
+                command.Parameters.Add(date);
+                command.Parameters.Add(length);
 
                 Read(command);
 
@@ -34,17 +50,31 @@ namespace App
             command.Dispose();
         }
 
-        public static void Generic()
+        public static void AddSong(Song song)
         {
             OracleCommand command = connection.CreateCommand();
             try {
                 connection.Open();
                 command.BindByName = true;
 
-                command.CommandText = "select first_name from employees where department_id = :id";
+                command.CommandText = @"insert into p_songs 
+                                        values (s.title = :title and
+                                              s.album = :album and
+                                              s.artist = :artist and 
+                                              s.date = :date and 
+                                              s.length = :length);";
 
-                OracleParameter id = new OracleParameter("id", 50);
-                command.Parameters.Add(id);
+                OracleParameter title = new OracleParameter("title", song.Title);
+                OracleParameter album = new OracleParameter("album", song.Album);
+                OracleParameter artist = new OracleParameter("artist", song.Artist);
+                OracleParameter date = new OracleParameter("date", song.Date);
+                OracleParameter length = new OracleParameter("length", song.Length);
+
+                command.Parameters.Add(title);
+                command.Parameters.Add(album);
+                command.Parameters.Add(artist);
+                command.Parameters.Add(date);
+                command.Parameters.Add(length);
 
                 Read(command);
 

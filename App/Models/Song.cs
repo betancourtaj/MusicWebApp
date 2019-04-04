@@ -4,13 +4,13 @@ namespace App.Models
 {
     public class Song
     {
-        public string Title { private get; set; }
-        public string Album { get; set; }
-        public string Artist { get; set; }
-        public DateTime Date{ get; set; }
-        public int Length { get; set; }
+        public string Title { get; set; } = null;
+        public string Album { get; set; } = null;
+        public string Artist { get; set; } = null;
+        public string Date{ get; set; } = null;
+        public double Length { get; set; } = 0.0d;
 
-        public Song(string title, string album, string artist, DateTime date, int length)
+        public Song(string title, string album, string artist, string date, double length)
         {
             Title = title;
             Album = album;
