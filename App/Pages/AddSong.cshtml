@@ -13,7 +13,7 @@
                 @Html.TextBoxFor(Model => Model.songAlbum, new { @type = "text"})
                 @Html.TextBoxFor(Model => Model.songArtist, new { @type = "text"})
                 @Html.TextBoxFor(Model => Model.songLength, new { @type = "text"})
-                @Html.EditorFor(Model => Model.songDate, "{0:yyyy-MM-dd}", new { @type = "date" })
+                @Html.EditorFor(Model => Model.songDate, new { @type = "date" })
                 <input type="submit" asp-page-handler="SubmitButton" value="Submit"/>
             </div>
         }

@@ -50,39 +50,48 @@ namespace App
             command.Dispose();
         }
 
-        public static void AddSong(Song song)
+        public static void AddSong(string title, string album, string artist, string sdate, string slength)
         {
+            Connect();
+
             OracleCommand command = connection.CreateCommand();
             try {
                 connection.Open();
                 command.BindByName = true;
 
-                command.CommandText = @"insert into p_songs 
-                                        values (s.title = :title and
-                                              s.album = :album and
-                                              s.artist = :artist and 
-                                              s.date = :date and 
-                                              s.length = :length);";
+                command.CommandText = @"insert into test_songs (id, title, album, artist, sdate, slength) values (:id, :title, :album, :artist, :sdate, :slength);";
 
-                OracleParameter title = new OracleParameter("title", song.Title);
-                OracleParameter album = new OracleParameter("album", song.Album);
-                OracleParameter artist = new OracleParameter("artist", song.Artist);
-                OracleParameter date = new OracleParameter("date", song.Date);
-                OracleParameter length = new OracleParameter("length", song.Length);
+                OracleParameter id = new OracleParameter("id", 1);
+                OracleParameter vtitle = new OracleParameter("title", title);
+                vtitle.OracleDbType = OracleDbType.Varchar2;
+                OracleParameter valbum = new OracleParameter("album", album);
+                vtitle.OracleDbType = OracleDbType.Varchar2;
+                OracleParameter vartist = new OracleParameter("artist", artist);
+                vtitle.OracleDbType = OracleDbType.Varchar2;
+                OracleParameter vdate = new OracleParameter("sdate", sdate);
+                vtitle.OracleDbType = OracleDbType.Varchar2;
+                OracleParameter vlength = new OracleParameter("slength", slength);
+                vtitle.OracleDbType = OracleDbType.Varchar2;
 
-                command.Parameters.Add(title);
-                command.Parameters.Add(album);
-                command.Parameters.Add(artist);
-                command.Parameters.Add(date);
-                command.Parameters.Add(length);
+                command.Parameters.Add(id);
+                command.Parameters.Add(vtitle);
+                command.Parameters.Add(valbum);
+                command.Parameters.Add(vartist);
+                command.Parameters.Add(vdate);
+                command.Parameters.Add(vlength);
 
-                Read(command);
+                //Read(command);
+                command.ExecuteNonQuery();
 
             } catch (OracleException ex)
             {
                 Console.WriteLine($"ORACLE EXCEPTION: {ex.Message}");
+                Console.WriteLine(ex.Errors);
+                Console.WriteLine(command.CommandText);
             }
             command.Dispose();
+
+            Close();
         }
 
         private static void Read(OracleCommand command)

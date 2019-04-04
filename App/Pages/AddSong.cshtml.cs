@@ -40,6 +40,8 @@ namespace App.Pages
             //MusicDataBase.SearchSong(song);
             //MusicDataBase.Close();
 
+            MusicDataBase.AddSong(songTitle, songAlbum, songArtist, songDate.ToString("MM:dd:yyyy"), songLength.ToString());
+
             Console.WriteLine($"Date: {songDate}");
             Console.WriteLine($"Title: {songTitle}");
             Console.WriteLine($"Album: {songAlbum}");
