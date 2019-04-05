@@ -59,19 +59,14 @@ namespace App
                 connection.Open();
                 command.BindByName = true;
 
-                command.CommandText = @"insert into test_songs (id, title, album, artist, sdate, slength) values (:id, :title, :album, :artist, :sdate, :slength);";
+                command.CommandText = @"insert into test_songs (id, title, album, artist, sdate, slength) values (:id, :title, :album, :artist, :sdate, :slength)";
 
                 OracleParameter id = new OracleParameter("id", 1);
                 OracleParameter vtitle = new OracleParameter("title", title);
-                vtitle.OracleDbType = OracleDbType.Varchar2;
                 OracleParameter valbum = new OracleParameter("album", album);
-                vtitle.OracleDbType = OracleDbType.Varchar2;
                 OracleParameter vartist = new OracleParameter("artist", artist);
-                vtitle.OracleDbType = OracleDbType.Varchar2;
                 OracleParameter vdate = new OracleParameter("sdate", sdate);
-                vtitle.OracleDbType = OracleDbType.Varchar2;
                 OracleParameter vlength = new OracleParameter("slength", slength);
-                vtitle.OracleDbType = OracleDbType.Varchar2;
 
                 command.Parameters.Add(id);
                 command.Parameters.Add(vtitle);
@@ -81,7 +76,13 @@ namespace App
                 command.Parameters.Add(vlength);
 
                 //Read(command);
-                command.ExecuteNonQuery();
+                try {
+                    command.ExecuteNonQuery();
+                }
+                catch (OracleException e)
+                {
+                    Console.WriteLine(e.Message);
+                }
 
             } catch (OracleException ex)
             {
