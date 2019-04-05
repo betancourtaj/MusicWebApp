@@ -30,16 +30,6 @@ namespace App.Pages
 
         public IActionResult OnPostSubmitButton()
         {
-            //Song song = new Song(Request.Form["title-input"],
-             //                    Request.Form["album-input"],
-             //                    Request.Form["artist-input"],
-             //                    Convert.ToDateTime(Request.Form["date-input"]).ToString(), 
-             //                    Convert.ToDouble(Request.Form["length-input"].ToString()));
-
-            //MusicDataBase.Connect();
-            //MusicDataBase.SearchSong(song);
-            //MusicDataBase.Close();
-
             MusicDataBase.AddSong(songTitle, songAlbum, songArtist, songDate.ToString("MM:dd:yyyy"), songLength.ToString());
 
             Console.WriteLine($"Date: {songDate}");
