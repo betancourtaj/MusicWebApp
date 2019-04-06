@@ -7,8 +7,14 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace App.Pages
 {
-    public class SearchSongControllerModel : PageModel
+    public class SearchSongModel : PageModel
     {
+
+        [BindProperty]
+        public string SearchString { get; set; }
+
+        public bool Requested = false;
+
         public void OnGet()
         {
         }

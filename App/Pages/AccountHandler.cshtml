@@ -1,0 +1,23 @@
+﻿@page
+@model App.Pages.AccountHandlerModel
+@{
+    ViewData["Title"] = "Account";
+}
+
+<section id="main">
+    <div class="left-floating-div">
+        <h1>Register</h1>
+        @using (Html.BeginForm("Register", "AccountHandler", FormMethod.Post))
+        {
+            <div>
+                @Html.TextBoxFor(Model => Model.Username, new { @type="text", @class="mm_text", @required="required"})
+            </div>
+
+            <div>
+                @Html.PasswordFor(Model => Model.Password, new { @type="password", @class="mm_text", @required="required"})
+            </div>
+
+            <input class="mm_button" type="submit" asp-page-handler="Register" value="Register"/>
+        }
+    </div>
+</section>

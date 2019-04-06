@@ -5,8 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-using App.Models;
-
 namespace App.Pages
 {
     public class AddSongModel : PageModel
@@ -25,11 +23,12 @@ namespace App.Pages
 
         public void OnGet()
         {
-            RedirectToPage("Pages/Index.cshtml");
         }
 
         public IActionResult OnPostSubmitButton()
         {
+            if(ModelState.IsValid)
+            {
             MusicDataBase.AddSong(songTitle, songAlbum, songArtist, songDate.ToString("MM:dd:yyyy"), songLength.ToString());
 
             Console.WriteLine($"Date: {songDate}");
@@ -38,23 +37,9 @@ namespace App.Pages
             Console.WriteLine($"Artist: {songArtist}");
             Console.WriteLine($"Length: {songLength}");
             
-            return RedirectToPage("./Index");
+                return RedirectToPage("./Index");
+            }
+            return RedirectToPage("./Error");
         }
-
-        public IActionResult OnPostGetSearchText(int id, string searchString)
-        {
-            Console.WriteLine($"REQUESTED: {Request.Form["searchString"]}");
-            return Page();
-        }
-
-/*
-        [HttpPost]
-        public IActionResult OnPost()
-        {
-            Console.WriteLine("Hello from OnPost!");
-            return RedirectToPage("./Index");
-        }
-
-         */
     }
 }

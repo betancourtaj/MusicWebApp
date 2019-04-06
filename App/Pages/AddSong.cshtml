@@ -9,12 +9,17 @@
         @using (Html.BeginForm("OnPostSubmitButton", "AddSongModel", FormMethod.Post))
         {
             <div>
-                @Html.TextBoxFor(Model => Model.songTitle, new { @type = "text"})
-                @Html.TextBoxFor(Model => Model.songAlbum, new { @type = "text"})
-                @Html.TextBoxFor(Model => Model.songArtist, new { @type = "text"})
-                @Html.TextBoxFor(Model => Model.songLength, new { @type = "text"})
-                @Html.EditorFor(Model => Model.songDate, new { @type = "date" })
-                <input type="submit" asp-page-handler="SubmitButton" value="Submit"/>
+                <small>Required</small>
+                @Html.TextBoxFor(Model => Model.songTitle, new { @type = "text", @placeholder = "Title", @class = "mm_text", @required="required"})
+                <small>Required</small>
+                @Html.TextBoxFor(Model => Model.songAlbum, new { @type = "text", @placeholder = "Album", @class = "mm_text", @required="required"})
+                <small>Required</small>
+                @Html.TextBoxFor(Model => Model.songArtist, new { @type = "text", @placeholder = "Artist", @class = "mm_text", @required="required" })
+                <small>Required</small>
+                @Html.TextBoxFor(Model => Model.songLength, new { @type = "text", @placeholder = "Length", @class = "mm_text", @value = 1})
+                <small>Required</small>
+                @Html.EditorFor(Model => Model.songDate, new { @type = "date"})
+                <input class="mm_button" type="submit" asp-page-handler="SubmitButton" value="Submit"/>
             </div>
         }
     </div>
