@@ -4,7 +4,36 @@
     ViewData["Title"] = "Home page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
+
+@{
+    var sessionId = @HttpContextAccessor.HttpContext.Session.GetString("IsRegistered");
+    var sessionUser = @HttpContextAccessor.HttpContext.Session.GetString("SessionUser");
+}
+
+@if(sessionId == "TRUE")
+{
+    <script>alert("Registered!")</script>
+}
+
+<section id="main">
+    <div class="text-center">
+        @if(sessionUser != null)
+        {
+            <h1 class="display-4">Welcome - @sessionUser</h1>
+        }
+        else
+        {
+            <h1 class="display-4">Welcome</h1>
+        }
+        @using (Html.BeginForm("Logout", "IndexModel", FormMethod.Post))
+        {
+            @if(sessionId == "TRUE")
+            {
+                <input class="mm_button" type="submit" asp-page-handler="LogoutButton" value="Logout"/>
+            }
+        }
+    </div>
+</section>

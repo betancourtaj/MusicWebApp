@@ -1,0 +1,51 @@
+﻿@page
+@model App.Pages.SearchSongModel
+@{
+}
+
+<section id="main">
+    <div class="container text-center">
+        <h1 class="display-4">Search</h1>
+        @Html.TextBoxFor(Model => Model.SearchString, new { @type="text", @class="search-bar"})
+    </div>
+    <!-- If searched for something then draw table below-->
+    <div>
+        <table class="search-table text-center">
+            <tr class="text-center">
+                <th>Title</th>
+                <th>Album</th>
+                <th>Artist</th>
+                <th>Date</th>
+                <th>Length</th>
+                <th>Add</th>
+            </tr>
+            <tr>
+                <td>DNA</th>
+                <td>DAMN.</th>
+                <td>Kendrick Lamar</th>
+                <td>10/12/2005</th>
+                <td>3.4</th>
+                <td>
+                    <div class="dropdown">
+                        <button class="dropdown-button">Playlist</button>
+                        <div class="dropdown-content">
+                            <a href="./Index">Playlist1</a>
+                            <a small>Playlist2</a>
+                            <a small>Playlist3</a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            @* @foreach(var song in @Model.ReturnedSongs)
+            {
+                <tr>
+                    <td>@song.Title</th>
+                    <td>@song.Album</th>
+                    <td>@song.Artist</th>
+                    <td>@song.Date</th>
+                    <td>@song.Length</th>
+                </tr>
+            }*@
+        </table>
+    </div>
+</section>

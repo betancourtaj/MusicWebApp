@@ -31,7 +31,8 @@ namespace App
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-
+            services.AddHttpContextAccessor();
+            services.AddSession(s => s.IdleTimeout = TimeSpan.FromMinutes(30));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
@@ -52,6 +53,7 @@ namespace App
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+            app.UseSession();
 
             app.UseMvc();
         }
