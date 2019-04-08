@@ -27,7 +27,7 @@ namespace App
                                               s.album = :album and
                                               s.artist = :artist and 
                                               s.date = :date and 
-                                              s.length = :length;";
+                                              s.length = :length";
 
                 OracleParameter title = new OracleParameter("title", song.Title);
                 OracleParameter album = new OracleParameter("album", song.Album);

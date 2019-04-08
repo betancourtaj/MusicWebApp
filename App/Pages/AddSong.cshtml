@@ -9,11 +9,16 @@
         @using (Html.BeginForm("OnPostSubmitButton", "AddSongModel", FormMethod.Post))
         {
             <div>
-                @Html.TextBoxFor(Model => Model.songTitle, new { @type = "text"})
-                @Html.TextBoxFor(Model => Model.songAlbum, new { @type = "text"})
-                @Html.TextBoxFor(Model => Model.songArtist, new { @type = "text"})
-                @Html.TextBoxFor(Model => Model.songLength, new { @type = "text"})
-                @Html.EditorFor(Model => Model.songDate, new { @type = "date" })
+                <small>Required</small>
+                @Html.TextBoxFor(Model => Model.songTitle, new { @type = "text", @placeholder = "Title"})
+                <small>Required</small>
+                @Html.TextBoxFor(Model => Model.songAlbum, new { @type = "text", @placeholder = "Album"})
+                <small>Required</small>
+                @Html.TextBoxFor(Model => Model.songArtist, new { @type = "text", @placeholder = "Artist"})
+                <small>Required</small>
+                @Html.TextBoxFor(Model => Model.songLength, new { @type = "text", @placeholder = "1.34"})
+                <small>Required</small>
+                @Html.EditorFor(Model => Model.songDate, new { @type = "date", @placeholder = "mm/dd/yyyy"})
                 <input type="submit" asp-page-handler="SubmitButton" value="Submit"/>
             </div>
         }
