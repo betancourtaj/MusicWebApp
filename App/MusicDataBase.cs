@@ -32,14 +32,14 @@ namespace App
                 OracleParameter title = new OracleParameter("title", song.Title);
                 OracleParameter album = new OracleParameter("album", song.Album);
                 OracleParameter artist = new OracleParameter("artist", song.Artist);
-                OracleParameter date = new OracleParameter("date", song.Date);
-                OracleParameter length = new OracleParameter("length", song.Length);
+                //OracleParameter date = new OracleParameter("date", song.Date);
+                //OracleParameter length = new OracleParameter("length", song.Length);
 
                 command.Parameters.Add(title);
                 command.Parameters.Add(album);
                 command.Parameters.Add(artist);
-                command.Parameters.Add(date);
-                command.Parameters.Add(length);
+                //command.Parameters.Add(date);
+                //command.Parameters.Add(length);
 
                 Read(command);
 
@@ -95,14 +95,22 @@ namespace App
             Close();
         }
 
-        private static void Read(OracleCommand command)
+        private static string[] Read(OracleCommand command)
         {
+            string[] array;
+            int i = 0;
+
             OracleDataReader reader = command.ExecuteReader();
+
+            array = new string[reader.FieldCount];
             while(reader.Read())
             {
-                Console.WriteLine(reader.GetString(0));
+                array[i] = reader.GetString(0);
+                i++;
             }
-            reader.Dispose();    
+            reader.Dispose();
+
+            return array;
         }
 
         public static void Close()
