@@ -1,0 +1,1 @@
+Select passwd From p_user where email = :email

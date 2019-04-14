@@ -1,0 +1,1 @@
+insert into p_artist values (:id)

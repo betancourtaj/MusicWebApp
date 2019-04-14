@@ -1,0 +1,1 @@
+insert into p_user (userid, email, username, passwd) values (addUserSequence.nextval, :email, :username, :passwd)

@@ -1,0 +1,29 @@
+﻿@page
+@model App.Pages.LoginModel
+@{
+}
+
+<section id="main">
+    <div class="left-floating-div">
+        <h1>Login</h1>
+        @using (Html.BeginForm("Login", "AccountHandler", FormMethod.Post))
+        {
+            <div>
+                @Html.LabelFor(Model => Model.Email, "Email")
+            </div>
+            <div>
+                @Html.TextBoxFor(Model => Model.Email, new { @type="email", @class="mm_text", @required="required"})
+            </div>
+
+            <div>
+                @Html.LabelFor(Model => Model.Password, "Password")
+            </div>
+            <div>
+                @Html.PasswordFor(Model => Model.Password, new { @type="password", @class="mm_text", @required="required"})
+            </div>
+
+            <input class="mm_button" type="submit" asp-page-handler="Login" value="Login"/>
+        }
+    </div>
+</section>
+

@@ -1,8 +1,8 @@
 ﻿@page
-@model App.Pages.AccountHandlerModel
+@model App.Pages.RegisterModel
 @{
-    ViewData["Title"] = "Account";
 }
+
 
 <section id="main">
     <div class="left-floating-div">
@@ -10,9 +10,22 @@
         @using (Html.BeginForm("Register", "AccountHandler", FormMethod.Post))
         {
             <div>
+                @Html.LabelFor(Model => Model.Email, "Email")
+            </div>
+            <div>
+                @Html.TextBoxFor(Model => Model.Email, new { @type="email", @class="mm_text", @required="required"})
+            </div>
+
+            <div>
+                @Html.LabelFor(Model => Model.Username, "Username")
+            </div>
+            <div>
                 @Html.TextBoxFor(Model => Model.Username, new { @type="text", @class="mm_text", @required="required"})
             </div>
 
+            <div>
+                @Html.LabelFor(Model => Model.Password, "Password")
+            </div>
             <div>
                 @Html.PasswordFor(Model => Model.Password, new { @type="password", @class="mm_text", @required="required"})
             </div>

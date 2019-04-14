@@ -1,0 +1,1 @@
+select userid from p_user where email = :email

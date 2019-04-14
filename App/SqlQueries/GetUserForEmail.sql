@@ -1,0 +1,1 @@
+select username from p_user where email = :email

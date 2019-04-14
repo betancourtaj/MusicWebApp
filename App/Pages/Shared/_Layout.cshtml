@@ -37,16 +37,32 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/AddSong">AddSong</a>
-                        </li>
+                        @if(@HttpContextAccessor.HttpContext.Session.GetString("IsLoggedIn") == "TRUE")
+                        {
+                            @if(@HttpContextAccessor.HttpContext.Session.GetString("IsArtist") == "TRUE")
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/Add">Add</a>
+                                </li>
+                            }
+
+                            @if(@HttpContextAccessor.HttpContext.Session.GetString("IsArtist") == null)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/RegisterArtist">Artist</a>
+                                </li>
+                            }
+                        }
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/SearchSong">SearchSong</a>
                         </li>
-                        @if(@HttpContextAccessor.HttpContext.Session.GetString("IsRegistered") == null)
+                        @if(@HttpContextAccessor.HttpContext.Session.GetString("IsLoggedIn") == null)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/AccountHandler">Login/Register</a>
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Login">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Register">Register</a>
                             </li>
                         }
                     </ul>

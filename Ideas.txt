@@ -1,0 +1,18 @@
+\AddSong:
+--------
+Add Song tab only visible to artists ( through session var)
+only thing visible first is text box for album
+two buttons:
+- select:
+    if(album.exists)
+    { allow user to add song }
+    else { alert and ask to create album }
+- add:
+    adds album to database
+
+ONLY THEN
+( either through bound CS Property or session var )
+unlock add song text boxes and buttons.
+
+add song to p_song, p_song_artist
+p_song_playlist edited later in some other page.

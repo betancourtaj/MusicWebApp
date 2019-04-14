@@ -1,0 +1,1 @@
+select artistid from p_artist where artistid = :artistid

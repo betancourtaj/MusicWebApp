@@ -9,20 +9,16 @@
 
 
 @{
-    var sessionId = @HttpContextAccessor.HttpContext.Session.GetString("IsRegistered");
+    var sessionId = @HttpContextAccessor.HttpContext.Session.GetString("IsLoggedIn");
     var sessionUser = @HttpContextAccessor.HttpContext.Session.GetString("SessionUser");
-}
-
-@if(sessionId == "TRUE")
-{
-    <script>alert("Registered!")</script>
+    var artistV = @HttpContextAccessor.HttpContext.Session.GetString("IsArtist");
 }
 
 <section id="main">
     <div class="text-center">
         @if(sessionUser != null)
         {
-            <h1 class="display-4">Welcome - @sessionUser</h1>
+            <h1 class="display-4">Welcome - @sessionUser - @artistV</h1>
         }
         else
         {

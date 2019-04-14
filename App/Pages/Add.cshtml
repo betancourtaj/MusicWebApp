@@ -1,0 +1,44 @@
+﻿@page
+@model App.Pages.AddModel
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
+
+@{
+
+    var hasSelect = Model.HasSelectedAlbum;
+    var artist = @HttpContextAccessor.HttpContext.Session.GetString("SessionUser");
+}
+
+
+<section id = "main">
+    <div class="left-floating-div" id="add-song-div">
+        <h1>Add</h1>
+        @using (Html.BeginForm("OnPostSubmitButton", "AddSongModel", FormMethod.Post))
+        {
+            @if(!hasSelect)
+            {
+                @if(Model.Albums != null)
+                {
+                    @foreach(var album in Model.Albums)
+                    {
+                        <input class="mm_button" type="submit" name="albumButton" id="albumButton" asp-page-handler="ChooseAlbum" value=@album />
+                    }
+                }
+            }
+            else
+            {
+                <div>
+                    <h1>@Model.Album</h1>
+                    @Html.TextBoxFor(Model => Model.Title, new { @type = "text", @placeholder = "Title", @class = "mm_text", @required="required"})
+                    @Html.TextBoxFor(Model => Model.Album, new { @type = "text",  @class = "mm_text", @placeholder=@Model.Album, @readonly="readonly" })
+                    @Html.TextBoxFor(Model => Model.Artist, new { @type = "text",  @class = "mm_text", @placeholder=@artist, @readonly="readonly" })
+                    @Html.EditorFor(Model => Model.Date, new { @type = "date"})
+                    <input class="mm_button" type="submit" asp-page-handler="AddSong" value="Submit"/>
+                </div>
+            }
+
+            <div></div>
+        }
+    </div>
+</section>
