@@ -12,19 +12,23 @@
 
 
 <section id = "main">
-    <div class="left-floating-div" id="add-song-div">
-        <h1>Add</h1>
+    <div class="left-floating-div text-light" id="add-song-div">
+        <u>
+            <h1>Add</h1>
+        </u>
         @using (Html.BeginForm("OnPostSubmitButton", "AddSongModel", FormMethod.Post))
         {
             @if(!hasSelect)
             {
                 @if(Model.Albums != null)
                 {
+                    <h3>Albums you own: </h3>
                     @foreach(var album in Model.Albums)
                     {
                         <input class="mm_button" type="submit" name="albumButton" id="albumButton" asp-page-handler="ChooseAlbum" value=@album />
                     }
                 }
+                <input class="mm_button" type="submit" name="addAlbumButton" id="addAlbumButton" asp-page-handler="SendToAddAlbum" value="Create" />
             }
             else
             {

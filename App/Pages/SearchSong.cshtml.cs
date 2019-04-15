@@ -15,8 +15,16 @@ namespace App.Pages
 
         public bool Requested = false;
 
-        public void OnGet()
+        public void OnPost(string data)
         {
+            Console.WriteLine($"Post: {data}");
+        }
+
+        public IActionResult OnGet(string data)
+        {
+            
+            Console.WriteLine($"My: {data}");
+            return Page();
         }
     }
 }

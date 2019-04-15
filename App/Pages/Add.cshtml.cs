@@ -65,5 +65,15 @@ namespace App.Pages
 
             return RedirectToPage("./Error");
         }
+
+        public IActionResult OnPostSendToAddAlbum()
+        {
+            if(ModelState.IsValid)
+            {
+                return RedirectToPage("./AddAlbum");
+            }
+
+            return RedirectToPage("./Error");
+        }
     }
 }

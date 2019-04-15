@@ -2,7 +2,7 @@
 @inject IHttpContextAccessor HttpContextAccessor
 
 <!DOCTYPE html>
-<html>
+<html class="bg-dark">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -20,9 +20,9 @@
     </environment>
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
-<body>
+<body class="bg-dark">
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-page="/Index">App</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -32,37 +32,37 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
+                            <a class="nav-link text-light" asp-area="" asp-page="/Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
+                            <a class="nav-link text-light" asp-area="" asp-page="/Privacy">Privacy</a>
                         </li>
                         @if(@HttpContextAccessor.HttpContext.Session.GetString("IsLoggedIn") == "TRUE")
                         {
                             @if(@HttpContextAccessor.HttpContext.Session.GetString("IsArtist") == "TRUE")
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/Add">Add</a>
+                                    <a class="nav-link text-light" asp-area="" asp-page="/Add">Add</a>
                                 </li>
                             }
 
                             @if(@HttpContextAccessor.HttpContext.Session.GetString("IsArtist") == null)
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/RegisterArtist">Artist</a>
+                                    <a class="nav-link text-light" asp-area="" asp-page="/RegisterArtist">Artist</a>
                                 </li>
                             }
                         }
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/SearchSong">SearchSong</a>
+                            <a class="nav-link text-light" asp-area="" asp-page="/SearchSong">SearchSong</a>
                         </li>
                         @if(@HttpContextAccessor.HttpContext.Session.GetString("IsLoggedIn") == null)
                         {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Login">Login</a>
+                            <li class="nav-item float-right">
+                                <a class="nav-link text-light" asp-area="" asp-page="/Login">Login</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Register">Register</a>
+                            <li class="nav-item float-right">
+                                <a class="nav-link text-light float-right" asp-area="" asp-page="/Register">Register</a>
                             </li>
                         }
                     </ul>
@@ -70,15 +70,15 @@
             </div>
         </nav>
     </header>
-    <div class="container">
+    <div class="container bg-dark">
         <partial name="_CookieConsentPartial" />
-        <main role="main" class="pb-3">
+        <main role="main" class="pb-3 bg-dark">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
+    <footer class="border-top footer text-muted bg-dark">
+        <div class="container bg-dark">
             &copy; 2019 - App - <a asp-area="" asp-page="/Privacy">Privacy</a>
         </div>
     </footer>

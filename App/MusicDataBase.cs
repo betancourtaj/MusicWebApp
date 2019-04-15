@@ -41,6 +41,70 @@ namespace App
             Close();
         }
 
+        public static void AddAlbum(string albumName, int? artistID, string releaseDate)
+        {
+            if(artistID == null) return;
+
+            Connect();
+
+            OracleCommand command = connection.CreateCommand();
+            try {
+                connection.Open();
+                command.BindByName = true;
+
+                command.CommandText = Constants.ReadSqlTextFromFile("AddAlbum.sql");
+                command.Parameters.Add("albumID", OracleDbType.Int32, ParameterDirection.Input);
+                command.Parameters.Add("albumTitle", OracleDbType.Varchar2, ParameterDirection.Input);
+                command.Parameters.Add("releaseDate", OracleDbType.Varchar2, ParameterDirection.Input);
+                command.Parameters.Add("artistID", OracleDbType.Int32, ParameterDirection.Input);
+                command.Parameters.Add("albumID", OracleDbType.Int32, ParameterDirection.Input);
+                int nextAlbumID = GetNextAlbumID();
+                command.Parameters[0].Value = nextAlbumID;
+                command.Parameters[1].Value = albumName;
+                command.Parameters[2].Value = releaseDate;
+                command.Parameters[3].Value = artistID;   
+                command.Parameters[4].Value = nextAlbumID;
+
+                command.ExecuteNonQuery();
+                Close();
+            }
+            catch (OracleException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            Close();
+        }
+
+        private static int GetNextAlbumID()
+        {
+            Connect();
+
+            OracleCommand command = connection.CreateCommand();
+            try {
+                connection.Open();
+                command.BindByName = true;
+
+                command.CommandText = Constants.ReadSqlTextFromFile("GetNewAlbumID.sql");
+
+                command.Parameters.Add("albumIdValue", OracleDbType.Int32, ParameterDirection.Output);
+                command.ExecuteNonQuery();
+
+                if(command.Parameters[0].Value != null)
+                {
+                    Close();
+                    return Convert.ToInt32(command.Parameters[0].Value.ToString());
+                }
+            }
+            catch (OracleException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            Close();
+            return -1;
+        }
+
         public static string[] GetAlbumsForArtist(int? artistID)
         {
             if(artistID == null)
@@ -77,8 +141,7 @@ namespace App
             return null;
         }
 
-        // FIXME: Needs fixing.
-        public static void AddSong(string title, string albumTitle, int? artistID, string releaseDate)
+        public static void AddSong(string songTitle, string albumTitle, int? artistID, string releaseDate)
         {
             if (artistID == null){
                 return;
@@ -94,12 +157,21 @@ namespace App
                 command.CommandText = Constants.ReadSqlTextFromFile("AddSong.sql");
                 //command.CommandType = CommandType.StoredProcedure;
 
-                /*command.Parameters.Add(new OracleParameter("songTitle", OracleDbType.Varchar2).Value = title);
-                command.Parameters.Add(new OracleParameter("releaseDate", OracleDbType.Varchar2).Value = releaseDate);
-                command.Parameters.Add(new OracleParameter("albumID", OracleDbType.Int32).Value = albumID);
-                command.Parameters.Add(new OracleParameter("artistID", OracleDbType.Int32).Value = artistID);
-                 */
-                Console.WriteLine(ReadInt(command)[0]);
+                command.Parameters.Add(":songID", OracleDbType.Varchar2, ParameterDirection.Input);
+                command.Parameters.Add(":songTitle", OracleDbType.Varchar2, ParameterDirection.Input);
+                command.Parameters.Add(":releaseDate", OracleDbType.Varchar2, ParameterDirection.Input);
+                command.Parameters.Add(":albumID", OracleDbType.Int32, ParameterDirection.Input);
+                command.Parameters.Add(":artistID", OracleDbType.Int32, ParameterDirection.Input);
+                command.Parameters.Add(":songID", OracleDbType.Varchar2, ParameterDirection.Input);
+                int songID = GetCurrentSongID();
+                command.Parameters[0].Value = songID;
+                command.Parameters[1].Value = songTitle;
+                command.Parameters[2].Value = releaseDate;
+                command.Parameters[3].Value = albumID;
+                command.Parameters[4].Value = artistID;
+                command.Parameters[5].Value = songID;
+
+                command.ExecuteNonQuery();
             }
             catch (OracleException e)
             {
@@ -107,6 +179,35 @@ namespace App
             }
 
             Close();
+        }
+
+        private static int GetCurrentSongID()
+        {
+            Connect();
+
+            OracleCommand command = connection.CreateCommand();
+            try {
+                connection.Open();
+                command.BindByName = true;
+
+                command.CommandText = Constants.ReadSqlTextFromFile("GetCurrentSongID.sql");
+
+                command.Parameters.Add("songIdValue", OracleDbType.Int32, ParameterDirection.Output);
+                command.ExecuteNonQuery();
+
+                if(command.Parameters[0].Value != null)
+                {
+                    Close();
+                    return Convert.ToInt32(command.Parameters[0].Value.ToString());
+                }
+            }
+            catch (OracleException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            Close();
+            return -1;
         }
 
         private static int GetAlbumID(string title, int? artistID) {

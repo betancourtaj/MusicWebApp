@@ -1,0 +1,21 @@
+﻿@page
+@model App.Pages.AddAlbumModel
+@{
+}
+
+<section id = "main">
+    <div class="left-floating-div text-light" id="add-song-div">
+        <u>
+            <h1>Add</h1>
+        </u>
+        @using (Html.BeginForm("OnPostSubmitButton", "AddSongModel", FormMethod.Post))
+        {
+            <div>
+                @Html.Label("Enter an album to create!")
+                @Html.TextBoxFor(Model => Model.AlbumName, new { @type = "text", @placeholder = "Title", @class = "mm_text", @required="required"})
+                @Html.TextBoxFor(Model => Model.ReleaseDate, new { @type = "date", @class = "mm_text", @required="required"})
+                <input class="mm_button" type="submit" asp-page-handler="CreateAlbum" value="Create"/>
+            </div>
+        }
+    </div>
+</section>

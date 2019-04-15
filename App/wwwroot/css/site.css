@@ -95,13 +95,14 @@ body {
 }
 
 .search-bar {
-  width: inherit;
+  width: 1000px;
   height: 40px;
   padding: 12px 20px;
   margin: 8px;
   box-sizing: border-box;
   vertical-align: top;
   border-color: black;
+  align-content: center;
 }
 
 .table-title-spaced {
