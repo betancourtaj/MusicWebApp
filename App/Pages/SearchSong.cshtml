@@ -7,11 +7,15 @@
 
     <div class="text-center text-light">
         <h1 class="display-4 text-light">Search</h1>
-        @using(Html.BeginForm("Search", "Search", FormMethod.Get))
-        {
-            @Html.TextBoxFor(Model => Model.SearchString, new { @type="text", @id="searchBar", @class="search-bar", @placeholder="search here"})
-            
-        }
+        <div class="search">
+            <input type="text" id="searchBar" class="search-bar" placeholder="Search..." autocomplete="off"/>
+            <div class="search-bar-content text-light">
+                <!-- PUT FOR LOOP FROM QUERY HERE! -->
+                <a href="./Index" class="text-light">Playlist1</a>
+                <a small>Playlist2</a>
+                <a small>Playlist3</a>
+            </div>
+        </div>
 
 
         <p class="text-light" name="content" id="content"></p>
@@ -19,7 +23,7 @@
         </div>
         <!-- If searched for something then draw table below-->
         <div>
-            <table class="search-table text-center text-light">
+            <table class="display-table text-center text-light">
                 <tr class="text-center">
                     <th>Title</th>
                     <th>Album</th>
@@ -37,8 +41,8 @@
                     <td>
                         <div class="dropdown">
                             <button class="dropdown-button">Playlist</button>
-                            <div class="dropdown-content">
-                                <a href="./Index">Playlist1</a>
+                            <div class="dropdown-content text-light">
+                                <a href="./Index" class="text-light">Playlist1</a>
                                 <a small>Playlist2</a>
                                 <a small>Playlist3</a>
                             </div>

@@ -94,6 +94,16 @@ body {
   background-color: white;
 }
 
+.search {
+  position: inherit;
+  display: inline-block;
+}
+
+.search-bar:focus + .search-bar-content {
+  display: block;
+  overflow-block: scroll;
+}
+
 .search-bar {
   width: 1000px;
   height: 40px;
@@ -103,6 +113,33 @@ body {
   vertical-align: top;
   border-color: black;
   align-content: center;
+  position: inherit;
+}
+
+.search-bar-content {
+  display: none;
+  position: fixed;
+  background-color: #222222;
+  min-width: 1015px;
+  z-index: 1;
+  border-color: white;
+  text-align: left;
+}
+
+.search-bar-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.search-bar-content a:hover {
+  background-color: #1a1a1a
+}
+
+.search:not(:focus) + .search-bar:focus {
+  display: block;
+  overflow-block: scroll;
 }
 
 .table-title-spaced {
@@ -110,7 +147,7 @@ body {
   border-bottom-color: black;
 }
 
-.search-table {
+.display-table {
   border: 1px solid black;
   width: 100%;
   border-collapse: separate;
@@ -130,7 +167,7 @@ body {
 .dropdown-content {
   display: none;
   position: absolute;
-  background-color: #f1f1f1;
+  background-color: #222222;
   min-width: 160px;
   z-index: 1;
 }
@@ -142,7 +179,7 @@ body {
   display: block;
 }
 
-.dropdown-content a:hover {background-color: #ddd}
+.dropdown-content a:hover {background-color: #1a1a1a}
 .dropdown:hover .dropdown-content {
   display: block;
   overflow-block: scroll;
@@ -150,3 +187,4 @@ body {
 .btn:hover, .dropdown:hover .btn  {
   background-color: #0b7dda;
 }
+

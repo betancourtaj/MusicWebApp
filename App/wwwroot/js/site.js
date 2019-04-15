@@ -20,4 +20,3 @@ $("#searchBar").keyup(function() {
         datatype: "json"
     });
 });
-
