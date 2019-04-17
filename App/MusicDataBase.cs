@@ -41,6 +41,100 @@ namespace App
             Close();
         }
 
+        public static Dictionary<string, string> GetSearchResults(string data)
+        {
+            if(data == null) return new Dictionary<string, string>();
+
+            Dictionary<string, string> results = new Dictionary<string, string>();
+
+            string[] albums = GetSearchResultsAlbum(data);
+            string[] songs = GetSearchResultsSong(data);
+
+            if(albums != null) 
+            {
+                foreach(string name in albums)
+                {
+                    results.Add(name, "Album");
+                }
+            }
+            if(songs != null)
+            {
+                foreach(string name in songs)
+                {
+                    results.Add(name, "Song");
+                }
+            }
+
+            if(albums == null && songs == null)
+            {
+                return new Dictionary<string, string>();
+            }
+            // TODO: ADD PLAYLIST SEARCH
+            return results;
+        }
+
+        private static string[] GetSearchResultsSong(string data)
+        {
+            Connect();
+
+            OracleCommand command = connection.CreateCommand();
+            try {
+                connection.Open();
+                command.BindByName = true;
+
+                command.CommandText = $"select title from p_song where title like '%{data}%'";
+
+                string[] array = Read(command);
+
+                if(array == null)
+                {
+                    Close();
+                    return null;
+                }
+
+                Close();
+                return array;
+            }
+            catch (OracleException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            Close();
+            return null;
+        }
+
+        private static string[] GetSearchResultsAlbum(string data)
+        {
+            Connect();
+
+            OracleCommand command = connection.CreateCommand();
+            try {
+                connection.Open();
+                command.BindByName = true;
+
+                command.CommandText = $"select title from p_album where title like '%{data}%'";
+                
+                string[] array = Read(command);
+
+                if(array == null)
+                {
+                    Close();
+                    return null;
+                }
+
+                Close();
+                return array;
+            }
+            catch (OracleException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            Close();
+            return null;
+        }
+
         public static void AddAlbum(string albumName, int? artistID, string releaseDate)
         {
             if(artistID == null) return;
