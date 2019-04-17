@@ -82,6 +82,7 @@ namespace App
                 connection.Open();
                 command.BindByName = true;
 
+                // FIXME: THIS IS VERY DANGEROUS AND SQL INJECTION CAN BE USED.
                 command.CommandText = $"select title from p_song where title like '%{data}%'";
 
                 string[] array = Read(command);
@@ -113,6 +114,7 @@ namespace App
                 connection.Open();
                 command.BindByName = true;
 
+                // FIXME: THIS IS VERY DANGEROUS AND SQL INJECTION CAN BE USED.
                 command.CommandText = $"select title from p_album where title like '%{data}%'";
                 
                 string[] array = Read(command);

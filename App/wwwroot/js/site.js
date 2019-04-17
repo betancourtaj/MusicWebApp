@@ -27,6 +27,8 @@ $("#searchBar").keyup(function() {
     });
 });
 
+
+// TODO: Figure out these for the search functionality.
 function getUpdatedAlbumArray() {
     alert("Albums called");
     $.ajax({

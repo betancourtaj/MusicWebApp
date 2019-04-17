@@ -12,7 +12,7 @@ namespace App.Pages
 
         [BindProperty]
         public string[] Test { get ; set; } = new string[] { "1", "2", "3" };
-`
+
         [BindProperty]
         public string SearchString { get; set; }
         [BindProperty(SupportsGet = true)]
