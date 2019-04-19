@@ -1,11 +1,25 @@
 ﻿@page
 @model App.Pages.UserProfileModel
+
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
 @{
+    ViewData["Title"] = "User-Page";
+    var userName = @HttpContextAccessor.HttpContext.Session.GetString("SessionUser");
 }
 
-<div class="user-sidebar">
-    <p>App</p>
-</div>
-<div class="user-content">
-    <p>App2</p>
+<div class="user-container text-light">
+    <div class="user-sidebar">
+        <h2>About: @userName</h2>
+        <p>Paragraph about the user and what they do etc etc..</p>
+    </div>
+    <div class="user-content">
+        <div>
+            <h1>@userName's Playlists:</h1>
+        </div>
+        <div>
+            <p>A</p>
+        </div>
+    </div>
 </div>

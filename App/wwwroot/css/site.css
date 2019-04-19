@@ -58,6 +58,25 @@ body {
 /* Custom types 
 -----------------------------------*/
 
+.user-container {
+  width: inherit;
+  height: inherit;
+}
+
+.user-sidebar {
+  width: 20%;
+  height: 100%;
+  float: left;
+  border-right: 1px solid white;
+  margin: 10px;
+}
+
+.user-content {
+  height: 100%;
+  float: left;
+  margin: 10px;
+}
+
 .left-floating-div {
   width: inherit;
   height: inherit;
@@ -75,7 +94,7 @@ body {
 .mm_button {
   width: fit-content;
   height: 50px;
-  padding: 12px, 20px;
+  padding: 12px 20px;
   margin: 8px;
   border-color: black;
   background-color: white;
@@ -84,7 +103,7 @@ body {
 .mm_text {
   width: 400px;
   height: 20px;
-  padding: 12px, 20px;
+  padding: 12px 20px;
   margin: 8px;
   box-sizing: border-box;
   vertical-align: top;
@@ -105,7 +124,7 @@ body {
 .search-bar {
   width: 1000px;
   height: 40px;
-  padding: 12px, 20px;
+  padding: 12px 20px;
   margin: 8px;
   box-sizing: border-box;
   vertical-align: top;
@@ -126,7 +145,7 @@ body {
 
 .search-bar-content a {
   color: black;
-  padding: 12px, 16px;
+  padding: 12px 16px;
   text-decoration: none;
   display: block;
 }
@@ -172,7 +191,7 @@ body {
 
 .dropdown-content a {
   color: black;
-  padding: 12px, 16px;
+  padding: 12px 16px;
   text-decoration: none;
   display: block;
 }
@@ -184,18 +203,4 @@ body {
 }
 .btn:hover, .dropdown:hover .btn  {
   background-color: #0b7dda;
-}
-
-.user-sidebar {
-  width: 20%;
-  height: 100%;
-  float: left;
-  margin: 10px;
-}
-
-.user-content {
-  width: 80%;
-  height: 100%;
-  float: right;
-  margin: 10px;
 }
