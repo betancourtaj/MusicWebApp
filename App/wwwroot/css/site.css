@@ -77,6 +77,52 @@ body {
   margin: 10px;
 }
 
+.user-header {
+  width: 300px;
+  height: 60px;
+  text-align: left;
+  float: left;
+  line-height: 60px;
+  margin-bottom: 10px;
+}
+
+.user-content-container {
+  margin-top: 80px;
+  margin-bottom: 80px;
+}
+
+.playlist-button {
+  height: 59px;
+  width: fit-content;
+  padding-left: 5px;
+  padding-right: 5px;
+  float: right;
+  background-color: #333333;
+  text-align: center;
+  border-style: none;
+  border-left: 1px solid white;
+  border-bottom: 1px solid white;
+}
+
+.playlist-container {
+  background-color: #222222;
+  border: 1px solid white;
+  width: 800px;
+  height: 60px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  margin-right: 10px;
+  font-size: larger;
+  line-height: 60px;
+}
+
+.playlist-title-container {
+  text-align: left;
+  width: fit-content;
+  float: left;
+  margin-left: 10px;
+}
+
 .left-floating-div {
   width: inherit;
   height: inherit;

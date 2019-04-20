@@ -1,0 +1,1 @@
+select bio from p_user where userid = :id

@@ -15,6 +15,7 @@ $("#searchBar").keyup(function() {
 
     $("#result").html(albumsArray[0]);
 
+    // TODO: Changing this to POST might work tbh lol, or not.
     $.ajax({
         type: "GET",
         url: "/SearchSong",

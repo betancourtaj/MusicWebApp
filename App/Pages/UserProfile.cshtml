@@ -6,20 +6,84 @@
 
 @{
     ViewData["Title"] = "User-Page";
-    var userName = @HttpContextAccessor.HttpContext.Session.GetString("SessionUser");
+    var IsEditBioMode = @HttpContextAccessor.HttpContext.Session.GetString("IsEditMode");
 }
 
 <div class="user-container text-light">
     <div class="user-sidebar">
-        <h2>About: @userName</h2>
-        <p>Paragraph about the user and what they do etc etc..</p>
+        <u>
+            <h2>About: @Model.Username</h2>
+        </u>
+        @if(IsEditBioMode != "TRUE")
+        {
+            @if(Model.Bio != null)
+            {
+                <p>@Model.Bio</p>
+            }
+            else
+            {
+                <p>@Model.Username has no bio!</p>
+            }
+            
+            @using (Html.BeginForm("OnPostEditBio", "UserProfileModel", FormMethod.Post))
+            {
+                <input type="submit" asp-page-handler="EditBio" class="mm_button" value="Edit"/>
+            }
+        }
+        else
+        {
+            @using (Html.BeginForm("OnPostSubmitEditedBio", "UserProfileModel", FormMethod.Post))
+            {
+                <input type="text" style="height: 200px;" />
+                <input type="submit" asp-page-handler="SubmitEditedBio" class="mm_button" value="Submit"/>
+            }
+        }
+        <div>
+        </div>
     </div>
     <div class="user-content">
-        <div>
-            <h1>@userName's Playlists:</h1>
+        <div class="user-header">
+            <div>
+                <u>
+                    <h1>@Model.Username's Playlists:</h1>
+                </u>
+            </div>
         </div>
-        <div>
-            <p>A</p>
+        <div style="float: right;">
+            @using (Html.BeginForm("OnPostSubmitEditedBio", "UserProfileModel", FormMethod.Post))
+            {
+                <input type="submit" asp-page-handler="CreateNewPlaylist" class="mm_button" value="Create New"/>
+            }
+        </div>
+        <div style="float: right;">
+            @using (Html.BeginForm("OnPostSubmitEditedBio", "UserProfileModel", FormMethod.Post))
+            {
+                <input type="submit" asp-page-handler="LogOut" class="mm_button" value="Log Out"/>
+            }
+        </div>
+        <div class="user-content-container">
+            @if(Model.Playlists != null)
+            {
+                <!-- Put FOREACH loop here to loop through playlists -->
+                @foreach(var title in Model.Playlists)
+                {
+                    <div class="playlist-container text-light">
+                        <div class="playlist-title-container">
+                            @title
+                        </div>
+                            @using (Html.BeginForm("OnPostSubmitEditedBio", "UserProfileModel", FormMethod.Post))
+                            {
+                                <input type="submit" asp-page-handler="ViewPlaylist" class="playlist-button text-light" value="View"/>
+                            }
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="text-light">
+                    <p>@Model.Username does not have any playlists!</p>
+                </div>
+            }
         </div>
     </div>
 </div>
