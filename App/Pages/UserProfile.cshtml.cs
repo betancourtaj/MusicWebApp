@@ -15,6 +15,7 @@ namespace App.Pages
 
         public void OnGet()
         {
+            // TODO: FIX TO ALLOW PEOPLE TO GO TO OTHERS PAGES WITHOUT LOGGING IN
             Session = HttpContext.Session;
 
             if(Session.GetString("IsLoggedIn") == null)
