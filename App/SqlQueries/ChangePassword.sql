@@ -1,0 +1,1 @@
+update p_user set passwd = :passwd where email = :email
