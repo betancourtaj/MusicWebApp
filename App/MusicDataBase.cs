@@ -635,7 +635,8 @@ namespace App
             }
             Close();
         }
-        //ToDo: implement this 
+
+        //TODO: implement this 
         public static void ChangePassword(string email, string username, string newPassword) {
             Connect();
 
