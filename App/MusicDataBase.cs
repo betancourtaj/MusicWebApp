@@ -635,6 +635,77 @@ namespace App
             }
             Close();
         }
+        //ToDo: implement this 
+        public static void ChangePassword(string email, string username, string newPassword) {
+            Connect();
+
+            OracleCommand command = connection.CreateCommand();
+            try {
+                connection.Open();
+                command.BindByName = true;
+
+                command.CommandText = Constants.ReadSqlTextFromFile("ChangePassword.sql");
+
+                command.Parameters.Add(new OracleParameter("passwd", Constants.HashMe(newPassword)));
+                command.Parameters.Add(new OracleParameter("email", email));
+
+                command.ExecuteNonQuery();
+
+            }
+            catch (OracleException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            Close();
+        }
+
+        public static void ChangeUsername(string email, string newUsername, string password) {
+            Connect();
+
+            OracleCommand command = connection.CreateCommand();
+            try {
+                connection.Open();
+                command.BindByName = true;
+
+                command.CommandText = Constants.ReadSqlTextFromFile("ChangeUsername.sql");
+
+                command.Parameters.Add(new OracleParameter("email", email));
+                command.Parameters.Add(new OracleParameter("username", newUsername));
+                //command.Parameters.Add(new OracleParameter("passwd", Constants.HashMe(password)));
+
+                command.ExecuteNonQuery();
+
+            }
+            catch (OracleException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            Close();
+        }
+
+        public static void addBio(string email, string bio) {
+            Connect();
+
+            OracleCommand command = connection.CreateCommand();
+            try {
+                connection.Open();
+                command.BindByName = true;
+
+                command.CommandText = Constants.ReadSqlTextFromFile("ChangeUsername.sql");
+
+                command.Parameters.Add(new OracleParameter("bio", bio));
+                command.Parameters.Add(new OracleParameter("email", email));
+                //command.Parameters.Add(new OracleParameter("passwd", Constants.HashMe(password)));
+
+                command.ExecuteNonQuery();
+
+            }
+            catch (OracleException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            Close();
+        }
 
         public static void Close()
         {
