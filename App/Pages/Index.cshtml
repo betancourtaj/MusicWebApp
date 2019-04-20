@@ -24,12 +24,5 @@
         {
             <h1 class="display-4">Welcome</h1>
         }
-        @using (Html.BeginForm("Logout", "IndexModel", FormMethod.Post))
-        {
-            @if(sessionId == "TRUE")
-            {
-                <input class="mm_button" type="submit" asp-page-handler="LogoutButton" value="Logout"/>
-            }
-        }
     </div>
 </section>

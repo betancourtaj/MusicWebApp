@@ -84,8 +84,13 @@ namespace App.Pages
         }
         public IActionResult OnPostLogOut()
         {
+            if(ModelState.IsValid)
+            {
+                Session = HttpContext.Session;
+                Session.Clear();
+                return RedirectToPage("./Index");
+            }
             return RedirectToPage("./Error");
-
         }
         public IActionResult OnPostEditBio()
         {

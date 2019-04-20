@@ -24,7 +24,7 @@ namespace App.Pages
             }
         }
 
-        public IActionResult OnPostLogin()
+        public IActionResult OnPostSubmit()
         {
             if(ModelState.IsValid)
             {

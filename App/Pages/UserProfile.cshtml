@@ -56,7 +56,7 @@
             }
         </div>
         <div style="float: right;">
-            @using (Html.BeginForm("OnPostSubmitEditedBio", "UserProfileModel", FormMethod.Post))
+            @using (Html.BeginForm("OnPostLogOut", "UserProfileModel", FormMethod.Post))
             {
                 <input type="submit" asp-page-handler="LogOut" class="mm_button" value="Log Out"/>
             }

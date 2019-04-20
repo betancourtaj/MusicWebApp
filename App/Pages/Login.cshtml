@@ -24,11 +24,14 @@
                 @Html.PasswordFor(Model => Model.Password, new { @type="password", @class="mm_text", @required="required"})
             </div>
 
-            <div class="container" style="background-color:#f1f1f1">
-                <a href="ForgotPassword">Forgot password?</a>
-            </div>
-
             <input class="mm_button" type="submit" asp-page-handler="Login" value="Login"/>
+        }
+
+        @using (Html.BeginForm("OnPostForgotPassword", "AccountHandler", FormMethod.Post))
+        {
+            <div>
+                <input type="submit" asp-page-handler="ForgotPassword" class="mm_button" value="Forgot Password" />
+            </div>
         }
     </div>
 </section>

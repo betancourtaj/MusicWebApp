@@ -17,18 +17,5 @@ namespace App.Pages
             session = HttpContext.Session;
             Console.WriteLine($"SESSION: {session.GetString("IsRegistered")}");
         }
-
-        public IActionResult OnPostLogoutButton()
-        {
-            if(ModelState.IsValid)
-            {
-                session = HttpContext.Session;
-                
-                session.Clear();
-                return Page();
-            }
-
-            return RedirectToPage("./Error");
-        }
     }
 }
