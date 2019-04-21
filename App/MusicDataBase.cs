@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Oracle.ManagedDataAccess.Client;
 using System.Data;
 using System.Data.OracleClient;
+using App.Models;
 
 namespace App
 {
@@ -13,6 +14,61 @@ namespace App
         public static void Connect()
         {
             connection = new OracleConnection(Constants.ConnectionString);
+        }
+
+        public static Comment[] GetCommentsForPlaylist(int userid, string playlist)
+        {
+            Connect();
+
+            OracleCommand command = connection.CreateCommand();
+            try {
+                connection.Open();
+                command.BindByName = true;
+
+                int playlistid = GetPlaylistIDForUser(userid, playlist);
+                command.CommandText = Constants.ReadSqlTextFromFile("GetCommentsForPlaylistID.sql");
+                command.Parameters.Add("id", OracleDbType.Int32, ParameterDirection.Input);
+                command.Parameters[0].Value = playlistid;
+
+                Comment[] comments = ReadComments(command);
+
+                if(comments != null)
+                {
+                    Close();
+                    return comments;
+                }
+
+                Close();
+                return null;
+            }
+            catch (OracleException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            Close();
+            return null;
+        }
+
+        private static Comment[] ReadComments(OracleCommand command)
+        {
+            List<Comment> commentList = new List<Comment>();
+
+            OracleDataReader reader = command.ExecuteReader();
+
+            while(reader.Read())
+            {
+                if(!reader.IsDBNull(0))
+                {
+                    commentList.Add(new Comment(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2), reader.GetInt32(3), GetUserNameForID(reader.GetInt32(3))));
+                }
+            }
+            reader.Dispose();
+
+            if(commentList.Count == 0)
+            return null;
+
+            return commentList.ToArray();
         }
 
         public static string GetBioForUserID(int userid)
@@ -43,6 +99,175 @@ namespace App
 
             Close();
             return null;
+        }
+
+        public static Song[] GetSongsFromPlaylist(int id, string playlist)
+        {
+            if(playlist == null) return null;
+
+            Connect();
+            OracleCommand command = connection.CreateCommand();
+            try {
+                connection.Open();
+                command.BindByName = true;
+
+                int[] songids = GetSongIDsFromPlaylist(id, playlist);
+                List<Song> songs = new List<Song>();
+
+                if(songids != null)
+                {
+                    foreach(var sid in songids)
+                    {
+                        command.CommandText = Constants.ReadSqlTextFromFile("GetSongsFromPlaylist.sql");
+                        command.Parameters.Add("id", OracleDbType.Int32, ParameterDirection.Input);
+                        command.Parameters[0].Value = sid;
+
+                        songs.Add(ReadSong(command));
+                    }
+
+                    Close();
+                    return songs.ToArray();
+                }
+                
+                Close();
+                return null;
+
+            }
+            catch(OracleException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            Close();
+            return null;
+        }
+
+
+
+        internal static int[] GetSongIDsFromPlaylist(int id, string playlist)
+        {
+            if(playlist == null) return null;
+            
+            Connect();
+            OracleCommand command = connection.CreateCommand();
+            try {
+                connection.Open();
+                command.BindByName = true;
+
+                int playlistid = GetPlaylistIDForUser(id, playlist);
+
+                command.CommandText = Constants.ReadSqlTextFromFile("GetSongIDsForPlaylist.sql");
+                command.Parameters.Add("id", OracleDbType.Varchar2, ParameterDirection.Input);
+                command.Parameters[0].Value = playlistid;
+
+                int[] array = ReadIntArray(command);
+                if(array != null)
+                {
+                    Close();
+                    return array;
+                }
+
+                Close();
+                return null;
+            }
+            catch(OracleException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            Close();
+            return null;
+        }
+
+        private static int GetPlaylistIDForUser(int id, string playlist)
+        {
+            if (playlist == null) return 0;
+
+            Connect();
+
+            OracleCommand command = connection.CreateCommand();
+            try {
+                connection.Open();
+                command.BindByName = true;
+
+                command.CommandText = Constants.ReadSqlTextFromFile("GetPlaylistIDForUser.sql");
+                command.Parameters.Add("id", OracleDbType.Int32, ParameterDirection.Input);
+                command.Parameters.Add("albumtitle", OracleDbType.Varchar2, ParameterDirection.Input);
+                command.Parameters[0].Value = id;
+                command.Parameters[1].Value = playlist;
+
+                int[] playlistIDs = ReadIntArray(command);
+
+                if(playlistIDs != null)
+                {
+                    Close();
+                    return playlistIDs[0];
+                }
+
+                Close();
+                return 0;
+            } catch (OracleException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            command.Dispose();
+
+            Close();
+            return 0;
+        }
+
+        private static Song ReadSong(OracleCommand command)
+        {
+            List<Song> songList = new List<Song>();
+
+            OracleDataReader reader = command.ExecuteReader();
+
+            while(reader.Read())
+            {
+                if(!reader.IsDBNull(0))
+                {
+                    songList.Add(new Song(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetInt32(3), GetAlbumNameForSongId(reader.GetInt32(3))));
+                }
+            }
+            reader.Dispose();
+
+            if(songList.Count == 0)
+            return null;
+
+            return songList[0];
+        }
+
+        public static string GetAlbumNameForSongId(int albumid)
+        {
+            Connect();
+            OracleCommand command = connection.CreateCommand();
+            try {
+                connection.Open();
+                command.BindByName = true;
+
+                command.CommandText = Constants.ReadSqlTextFromFile("GetAlbumNameForSongId.sql");
+
+                command.Parameters.Add("id", OracleDbType.Int32, ParameterDirection.Input);
+                command.Parameters[0].Value = albumid;
+
+                string[] array = Read(command);
+                if(array != null)
+                {
+                    Close();
+                    return array[0];
+                }
+
+                Close();
+                return null;
+            } catch (OracleException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            Close();
+            return null;
+
+
         }
 
         public static void AddArtist(int? id) {
@@ -140,7 +365,7 @@ namespace App
             Dictionary<string, string> results = new Dictionary<string, string>();
 
             string[] albums = GetSearchResultsAlbum(data);
-            string[] songs = GetSearchResultsSong(data);
+            Song[] songs = GetSearchResultsSong(data);
 
             if(albums != null) 
             {
@@ -151,9 +376,9 @@ namespace App
             }
             if(songs != null)
             {
-                foreach(string name in songs)
+                foreach(var name in songs)
                 {
-                    results.Add(name, "Song");
+                    results.Add(name.Title, "Song");
                 }
             }
 
@@ -165,7 +390,92 @@ namespace App
             return results;
         }
 
-        private static string[] GetSearchResultsSong(string data)
+        internal static void ChangeBio(string bio, int? userid)
+        {
+            if(bio == null) return;
+            if(userid == null) return;
+
+            Connect();
+
+            OracleCommand command = connection.CreateCommand();
+            try {
+                connection.Open();
+                command.BindByName = true;
+
+                command.CommandText = Constants.ReadSqlTextFromFile("ChangeBio.sql");
+                command.Parameters.Add("biotext", OracleDbType.Varchar2, ParameterDirection.Input);
+                command.Parameters.Add("id", OracleDbType.Int32, ParameterDirection.Input);
+                command.Parameters[0].Value = bio;
+                command.Parameters[1].Value = userid;
+
+                command.ExecuteNonQuery();
+                Close();
+            }
+            catch(OracleException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            Close();
+        }
+
+        internal static void ChangeComment(string comment, int commentid)
+        {
+            if(comment == null) return;
+
+            Connect();
+
+            OracleCommand command = connection.CreateCommand();
+            try {
+                connection.Open();
+                command.BindByName = true;
+
+                command.CommandText = Constants.ReadSqlTextFromFile("ChangeBio.sql");
+                command.Parameters.Add("commentText", OracleDbType.Varchar2, ParameterDirection.Input);
+                command.Parameters.Add("id", OracleDbType.Int32, ParameterDirection.Input);
+                command.Parameters[0].Value = comment;
+                command.Parameters[1].Value = commentid;
+
+                command.ExecuteNonQuery();
+                Close();
+            }
+            catch(OracleException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            Close();
+        }
+
+        public static int FindArtistID(int songID) 
+        {
+            Connect();
+            int artistID = 0;
+
+            OracleCommand command = connection.CreateCommand();
+            try {
+                connection.Open();
+                command.BindByName = true;
+
+                command.CommandText = Constants.ReadSqlTextFromFile("GetArtistFromSongID.sql");
+                command.Parameters.Add("songid", OracleDbType.Varchar2, ParameterDirection.Input);
+                command.Parameters[0].Value = songID;
+
+                artistID =  ReadSingleInt(command);
+            
+                Close();
+                return artistID;
+            }
+            catch (OracleException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            Close();
+            return -1;
+        }
+
+        public static Song[] GetSearchResultsSong(string data)
         {
             Connect();
 
@@ -174,19 +484,20 @@ namespace App
                 connection.Open();
                 command.BindByName = true;
 
-                // FIXME: THIS IS VERY DANGEROUS AND SQL INJECTION CAN BE USED.
-                command.CommandText = $"select title from p_song where title like '%{data}%'";
+                command.CommandText = Constants.ReadSqlTextFromFile("GetSongForTitleLike.sql");
+                command.Parameters.Add("dataString", OracleDbType.Varchar2, ParameterDirection.Input);
+                command.Parameters[0].Value = data;
 
-                string[] array = Read(command);
+                Song[] songs = ReadSongArray(command);
 
-                if(array == null)
+                if(songs == null)
                 {
                     Close();
                     return null;
                 }
 
                 Close();
-                return array;
+                return songs;
             }
             catch (OracleException e)
             {
@@ -197,7 +508,28 @@ namespace App
             return null;
         }
 
-        private static string[] GetSearchResultsAlbum(string data)
+        private static Song[] ReadSongArray(OracleCommand command)
+        {
+            List<Song> songList = new List<Song>();
+
+            OracleDataReader reader = command.ExecuteReader();
+
+            while(reader.Read())
+            {
+                if(!reader.IsDBNull(0))
+                {
+                    songList.Add(new Song(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetInt32(3), GetAlbumNameForSongId(reader.GetInt32(3))));
+                }
+            }
+            reader.Dispose();
+
+            if(songList.Count == 0)
+            return null;
+
+            return songList.ToArray();
+        }
+
+        public static string[] GetSearchResultsAlbum(string data)
         {
             Connect();
 
@@ -206,8 +538,9 @@ namespace App
                 connection.Open();
                 command.BindByName = true;
 
-                // FIXME: THIS IS VERY DANGEROUS AND SQL INJECTION CAN BE USED.
-                command.CommandText = $"select title from p_album where title like '%{data}%'";
+                command.CommandText = Constants.ReadSqlTextFromFile("GetAlbumForTitleLike.sql");
+                command.Parameters.Add("dataString", OracleDbType.Varchar2, ParameterDirection.Input);
+                command.Parameters[0].Value = data;
                 
                 string[] array = Read(command);
 
@@ -416,7 +749,7 @@ namespace App
                 command.Parameters.Add(new OracleParameter("title", title));
                 command.Parameters.Add(new OracleParameter("artistid", artistID));
 
-                array = ReadInt(command);
+                array = ReadIntArray(command);
                 Close();
 
             } catch (OracleException e)
@@ -447,7 +780,7 @@ namespace App
                 
                 command.Parameters.Add("artistid", artistid);
 
-                int[] array = ReadInt(command);
+                int[] array = ReadIntArray(command);
 
                 if(array == null)
                 {
@@ -480,7 +813,7 @@ namespace App
 
                 command.Parameters.Add(new OracleParameter("email", email));
 
-                array = ReadInt(command);
+                array = ReadIntArray(command);
                 Close();
 
             } catch (OracleException e)
@@ -567,7 +900,7 @@ namespace App
             return list.ToArray();
         }
 
-        private static int[] ReadInt(OracleCommand command)
+        private static int[] ReadIntArray(OracleCommand command)
         {
             List<int> list = new List<int>();
 
@@ -583,6 +916,24 @@ namespace App
             return null;
 
             return list.ToArray();
+        }
+
+        private static int ReadSingleInt(OracleCommand command)
+        {
+            List<int> list = new List<int>();
+
+            OracleDataReader reader = command.ExecuteReader();
+
+            while(reader.Read())
+            {
+                list.Add(reader.GetInt32(0));
+            }
+            reader.Dispose();
+
+            if(list.Count == 0)
+            return 0;
+
+            return list[0];
         }
 
         public static bool UserExists(string email)

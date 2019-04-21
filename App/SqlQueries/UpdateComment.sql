@@ -1,0 +1,1 @@
+update p_comment set text = :commentText where commentid = :id

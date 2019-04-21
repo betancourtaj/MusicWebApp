@@ -2,14 +2,16 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your Javascript code.
-var dataString;
+var searchString;
 var albumsArray;
 var songsArray;
+var bioCharacterCount;
+var commentCharacterCount;
 
 
-$("#searchBar").keyup(function() {
-    dataString = this.value;
-    $("#content").html(dataString);
+/*$("#searchBar").keyup(function() {
+    searchString = this.value;
+    $("#content").html(searchString);
     getUpdatedAlbumArray();
     getUpdatedSongArray();
 
@@ -19,7 +21,7 @@ $("#searchBar").keyup(function() {
     $.ajax({
         type: "GET",
         url: "/SearchSong",
-        data: {data: dataString},
+        data: {data: searchString},
         success: function(result)
         {
             //alert(dataString);
@@ -57,7 +59,36 @@ function getUpdatedSongArray() {
         },
         datatype: "json"
     });
-}
+}*/
+
+$("#user-bio-text").keyup(function() {
+    bioCharacterCount = this.value.length;
+    $("#character-count").html(bioCharacterCount);
+
+    if(bioCharacterCount > 100 || bioCharacterCount === 0)
+    {
+        $('#bio-submit').attr('disabled','disabled');
+    }
+    else
+    {
+        $('#bio-submit').removeAttr('disabled');
+
+    }
+});
+
+$("#commentText").keyup(function() {
+    commentCharacterCount = this.value.length;
+    $("#character-count").html(commentCharacterCount);
+
+    if(commentCharacterCount > 240 || commentCharacterCount === 0)
+    {
+        $('#comment-submit').attr('disabled','disabled');
+    }
+    else
+    {
+        $('#comment-submit').removeAttr('disabled');
+    }
+});
 
 // The CSHTML file is loaded as soon as you load the SearchSong page (Initially). As soon as you interact with the page,
 // (click or type in the search bar) the Server code updates by filling the arrays with the queried data, but the CSHTML file

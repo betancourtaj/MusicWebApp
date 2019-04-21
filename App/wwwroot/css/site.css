@@ -58,6 +58,25 @@ body {
 /* Custom types 
 -----------------------------------*/
 
+.song-container {
+  background-color: #222222;
+  border: 1px solid white;
+  width: inherit;
+  height: 80px;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  font-size: x-large;
+  line-height: 60px;
+}
+
+.song-contianer-subsection {
+  float: left;
+  width: 25%;
+  height: inherit;
+  text-align: center;
+
+}
+
 .user-container {
   width: inherit;
   height: inherit;
@@ -112,8 +131,81 @@ body {
   margin-bottom: 10px;
   margin-top: 10px;
   margin-right: 10px;
-  font-size: larger;
+  font-size: x-large;
   line-height: 60px;
+  text-align: center;
+}
+
+.playlist-title {
+  text-align: center;
+  width: inherit;
+  float: initial;
+  margin-bottom: 10px;
+}
+
+.view-playlist-content {
+  width: 100%;
+  height: 100%;
+  align-content: center;
+  align-items: center;
+}
+
+.comment {
+  width: inherit;
+  height: 150px;
+  background-color: #333333;
+  border: 1px solid white;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  align-self: center;
+}
+
+.comment-header {
+  width: inherit;
+  height: 30%;
+  border-bottom: 1px solid white;
+  line-height: 250%;
+}
+
+.comment-user {
+  width: 40px;
+  height: 40px;
+  float: left;
+  margin-left: 20px;
+}
+
+.comment-text {
+  width: inherit;
+  height: 70%;
+  background-color: #444444;
+  text-align: left;
+  padding: 10px;
+}
+
+.comment-container {
+  width: inherit;
+  height: inherit;
+  float: left;
+}
+
+.comment-edit-button {
+  width: 80px;
+  height: 30px;
+  margin-top: 5px;
+  margin-bottom: 2px;
+  margin-right: 10px;
+  background-color: #444444;
+  border: 1px solid black;
+  line-height: 30px;
+}
+
+.mm_comment-textbox {
+  width: inherit;
+  height: 70%;
+  word-wrap: normal;
+  resize: none;
+  overflow-wrap: break-word;
+  text-align: left;
 }
 
 .playlist-title-container {
@@ -135,6 +227,16 @@ body {
   height: inherit;
   float: right;
   margin: 10px;
+}
+
+.mm_bio-textbox {
+  width: inherit;
+  height: 100px;
+  word-wrap: normal;
+  line-height: normal;
+  text-align: left;
+  resize: none;
+  overflow-wrap: break-word;
 }
 
 .mm_button {

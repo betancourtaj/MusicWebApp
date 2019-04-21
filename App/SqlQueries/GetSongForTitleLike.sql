@@ -1,0 +1,1 @@
+select * from p_song where title like concat(concat('%', :dataString), '%')

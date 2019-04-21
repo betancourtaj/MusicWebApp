@@ -1,6 +1,91 @@
 ﻿@page
 @model App.Pages.ViewPlaylistModel
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
 @{
 }
 
-<p class="text-light">Username: @Model.UserName</p>
+<div class="view-playlist-content">
+    <div class="playlist-title text-light">
+        <u>
+            <h1 class="display-4">@Model.PlaylistName</h1>
+        </u>
+    </div>
+    <div>
+        @foreach(var song in Model.Songs)
+        {
+            <div class="song-container text-light">
+                <div class="song-contianer-subsection">
+                    <p>@song.SongID</p>
+                </div>
+                <div class="song-contianer-subsection">
+                    <p>@song.Title</p>
+                </div>
+                <div class="song-contianer-subsection">
+                    <p>@song.ReleaseDate</p>
+                </div>
+                <div class="song-contianer-subsection">
+                    <p>@song.AlbumName</p>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="comment-container text-light">
+        @if(Model.Comments != null)
+        {
+            @foreach(var comment in Model.Comments)
+            {
+                <div class="comment">
+                    <div class="comment-header">
+                        <div class="comment-user">
+                            <p>@comment.Username</p>
+                        </div>
+                        @if(comment.UserID == @HttpContextAccessor.HttpContext.Session.GetInt32("UserID"))
+                        {
+                            @if(@HttpContextAccessor.HttpContext.Session.GetString("IsEditMode") == "FALSE")
+                            {
+                                @using (Html.BeginForm("OnPostEdit", "ViewPlaylist", FormMethod.Post))
+                                {
+                                    <div style="float: right;" class="text-light">
+                                        <input type="submit" id="comment-edit" asp-page-handler="Edit" value="Edit" class="comment-edit-button"/>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                @using (Html.BeginForm("OnPostSubmit", "ViewPlaylist", FormMethod.Post))
+                                {
+                                    <div style="float: right;" class="text-light">
+                                        <input type="submit" id="comment-submit" asp-page-handler="Submit" value="Submit" class="comment-edit-button" disabled="disabled"/>
+                                    </div>
+                                }
+                            }
+                        }
+                        <!-- if same user as comment user -->
+                        <!-- <div class="comment-edit-button"></div> -->
+                    </div>
+                        @if(@HttpContextAccessor.HttpContext.Session.GetString("IsEditMode") == "FALSE")
+                        {
+                            <div class="comment-text">
+                                <p>@comment.Text</p>
+                            </div>
+                        }
+                        else
+                        {
+                            @if(comment.UserID == @HttpContextAccessor.HttpContext.Session.GetInt32("UserID"))
+                            {
+                                <textarea id="commentText" name="commentText" class="mm_comment-textbox"></textarea>
+                            }
+                            else
+                            {
+                                <div class="comment-text">
+                                    <p>@comment.Text</p>
+                                </div>
+                            }
+                        }
+                </div>
+            }
+        }
+    </div>
+</div>

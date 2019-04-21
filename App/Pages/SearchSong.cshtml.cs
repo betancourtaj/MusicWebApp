@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Http;
+using App.Models;
 
 namespace App.Pages
 {
@@ -12,17 +14,48 @@ namespace App.Pages
 
         [BindProperty]
         public string[] Test { get ; set; } = new string[] { "1", "2", "3" };
-
         [BindProperty]
-        public string SearchString { get; set; }
+        public Song[] Songs { get; set; }
+        [BindProperty]
+        public List<string> ArtistNames { get; set; }
+        [BindProperty]
+        public string[] Albums { get; set; }
+        [BindProperty]
+        public string[] Playlists { get; private set; }
+        [BindProperty]
+        public int PageUserID { get; private set; }
+        [BindProperty]
+        string SearchString { get; set; }
         [BindProperty(SupportsGet = true)]
         public string[] SearchResults { get; set; }
         [BindProperty(SupportsGet = true)]
         public string[] SearchKeys { get; set; }
 
+        private ISession Session;
+
         public void OnPost(string data)
         {
+
             Console.WriteLine($"Post: {data}");
+        }
+
+        public void OnPostSearch() {
+            SearchString = Request.Form["search-bar"];
+            Albums = MusicDataBase.GetSearchResultsAlbum(SearchString);
+            Songs = MusicDataBase.GetSearchResultsSong(SearchString);
+            if (Songs != null){
+                for (int i=0; i<Songs.Length; i++) {
+                    int artistId = MusicDataBase.FindArtistID(Songs[i].SongID);
+                    string artistName = MusicDataBase.GetUserNameForID(artistId);
+                    ArtistNames.Add(artistName);
+                }
+            }
+        }
+
+        public void OnPostDisplayPlaylist(string userId) {
+            Session = HttpContext.Session;
+            PageUserID = Convert.ToInt32((string) userId);
+            Playlists = MusicDataBase.GetPlaylistNamesForUserID(PageUserID);
         }
 
         public IActionResult OnGet(string data)
@@ -30,7 +63,7 @@ namespace App.Pages
             var results = MusicDataBase.GetSearchResults(data);
             SearchResults = results.Keys.ToArray();
             SearchKeys = results.Values.ToArray();
-            SearchString = data;
+            //SearchString = data;
             Console.WriteLine($"My: {data}");
             return Page();
         }

@@ -1,0 +1,1 @@
+update p_user set bio = :biotext where userid = :id

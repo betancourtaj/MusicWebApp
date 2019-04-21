@@ -7,6 +7,8 @@
 @{
     ViewData["Title"] = "User-Page";
     var IsEditBioMode = @HttpContextAccessor.HttpContext.Session.GetString("IsEditMode");
+    var SessionUserID = @HttpContextAccessor.HttpContext.Session.GetInt32("UserID");
+    var IsSameUser = Model.PageUserID == SessionUserID;
 }
 
 <div class="user-container text-light">
@@ -25,17 +27,20 @@
                 <p>@Model.Username has no bio!</p>
             }
             
-            @using (Html.BeginForm("OnPostEditBio", "UserProfileModel", FormMethod.Post))
+            @if(IsSameUser)
             {
-                <input type="submit" asp-page-handler="EditBio" class="mm_button" value="Edit"/>
+                @using (Html.BeginForm("OnPostEditBio", "UserProfileModel", FormMethod.Post))
+                {
+                    <input type="submit" asp-page-handler="EditBio" class="mm_button" value="Edit"/>
+                }
             }
         }
         else
         {
             @using (Html.BeginForm("OnPostSubmitEditedBio", "UserProfileModel", FormMethod.Post))
             {
-                <input type="text" style="height: 200px;" />
-                <input type="submit" asp-page-handler="SubmitEditedBio" class="mm_button" value="Submit"/>
+                <textarea id="user-bio-text" name="user-bio-text" class="mm_bio-textbox"></textarea>
+                <input type="submit" id="bio-submit" asp-page-handler="SubmitEditedBio" class="mm_button" value="Submit" disabled="disabled"/>
             }
         }
         <div>
@@ -49,33 +54,31 @@
                 </u>
             </div>
         </div>
-        <div style="float: right;">
-            @using (Html.BeginForm("OnPostSubmitEditedBio", "UserProfileModel", FormMethod.Post))
-            {
-                <input type="submit" asp-page-handler="CreateNewPlaylist" class="mm_button" value="Create New"/>
-            }
-        </div>
-        <div style="float: right;">
-            @using (Html.BeginForm("OnPostLogOut", "UserProfileModel", FormMethod.Post))
-            {
-                <input type="submit" asp-page-handler="LogOut" class="mm_button" value="Log Out"/>
-            }
-        </div>
+        @if(IsSameUser)
+        {
+            <div style="float: right;">
+                @using (Html.BeginForm("OnPostSubmitEditedBio", "UserProfileModel", FormMethod.Post))
+                {
+                    <input type="submit" asp-page-handler="CreateNewPlaylist" class="mm_button" value="Create New"/>
+                }
+            </div>
+            <div style="float: right;">
+                @using (Html.BeginForm("OnPostLogOut", "UserProfileModel", FormMethod.Post))
+                {
+                    <input type="submit" asp-page-handler="LogOut" class="mm_button" value="Log Out"/>
+                }
+            </div>
+        }
         <div class="user-content-container">
             @if(Model.Playlists != null)
             {
                 <!-- Put FOREACH loop here to loop through playlists -->
                 @foreach(var title in Model.Playlists)
                 {
-                    <div class="playlist-container text-light">
-                        <div class="playlist-title-container">
-                            @title
-                        </div>
-                            @using (Html.BeginForm("OnPostSubmitEditedBio", "UserProfileModel", FormMethod.Post))
-                            {
-                                <input type="submit" asp-page-handler="ViewPlaylist" class="playlist-button text-light" value="View"/>
-                            }
-                    </div>
+                    @using (Html.BeginForm("OnPostSubmitEditedBio", "UserProfileModel", FormMethod.Post))
+                    {
+                        <input type="submit" id="viewPlaylist" name="viewPlaylist" asp-page-handler="ViewPlaylist" class="playlist-container text-light" value=@title/>
+                    }
                 }
             }
             else
