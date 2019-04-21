@@ -52,6 +52,7 @@ namespace App.Pages
                 {
                     Username = Session.GetString("SessionUser");
                     PageUserID = (int) Session.GetInt32("UserID");
+                    Session.SetInt32("PlaylistUserID", PageUserID);
                     Playlists = MusicDataBase.GetPlaylistNamesForUserID((int) Session.GetInt32("UserID"));
                     Bio = MusicDataBase.GetBioForUserID((int) Session.GetInt32("UserID"));
                 }
