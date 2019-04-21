@@ -33,6 +33,7 @@ namespace App.Pages
             {
                 PageUserID = Convert.ToInt32((string) userId);
                 string usrName = MusicDataBase.GetUserNameForID(PageUserID);
+                Session.SetInt32("PlaylistUserID", PageUserID);
 
                 if(usrName != null)
                 {
@@ -70,7 +71,7 @@ namespace App.Pages
                 Session = HttpContext.Session;
                 Session.SetString("IsEditMode", "FALSE");
 
-                return Redirect($"./ViewPlaylist?userId={Session.GetInt32("UserID")}&playlist={viewPlaylist}");
+                return Redirect($"./ViewPlaylist?userId={Session.GetInt32("PlaylistUserID")}&playlist={viewPlaylist}");
             }
             return RedirectToPage("./Error");
         }

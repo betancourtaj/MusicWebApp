@@ -30,10 +30,17 @@ namespace App.Pages
             Session = HttpContext.Session;
 
             UserID = userId;
+            Session.SetInt32("PlaylistUserID", UserID);
             PlaylistName = playlist;
-            Session.SetString("PlaylistName", playlist);
+            Session.SetString("PlaylistName", PlaylistName);
 
             GetSongsAndComments();
+
+            string[] playlists = MusicDataBase.GetPlaylistNamesForUserID(UserID);
+            if(playlists != null && !playlists.Contains(playlist))
+            {
+                Response.Redirect("./Error");
+            }
         }
 
         private void GetSongsAndComments()
@@ -42,14 +49,14 @@ namespace App.Pages
             Comments = MusicDataBase.GetCommentsForPlaylist(UserID, PlaylistName);
         }
 
-        public IActionResult OnPostEdit()
+        public IActionResult OnPostEdit(string data)
         {
             if(ModelState.IsValid)
             {
                 Session = HttpContext.Session;
                 Session.SetString("IsEditMode", "TRUE");
                 GetSongsAndComments();
-                return Redirect($"./ViewPlaylist?userId={Session.GetInt32("UserID")}&playlist={Session.GetString("PlaylistName")}");
+                return Redirect($"./ViewPlaylist?userId={Session.GetInt32("PlaylistUserID")}&playlist={Session.GetString("PlaylistName")}");
             }
             
             return RedirectToPage("./Error");
@@ -61,9 +68,11 @@ namespace App.Pages
             {
                 Session = HttpContext.Session;
                 Session.SetString("IsEditMode", "FALSE");
+                string commentString = Request.Form["commentText"];
+                string commentid = Request.Form["comment-id-texta"];
                 GetSongsAndComments();
-                
-                return Redirect($"./ViewPlaylist?userId={Session.GetInt32("UserID")}&playlist={Session.GetString("PlaylistName")}");
+                MusicDataBase.ChangeComment(commentString, Convert.ToInt32(commentid));
+                return Redirect($"./ViewPlaylist?userId={Session.GetInt32("PlaylistUserID")}&playlist={Session.GetString("PlaylistName")}");
             }
             return RedirectToPage("./Error");
         }

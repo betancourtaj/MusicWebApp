@@ -430,7 +430,7 @@ namespace App
                 connection.Open();
                 command.BindByName = true;
 
-                command.CommandText = Constants.ReadSqlTextFromFile("ChangeBio.sql");
+                command.CommandText = Constants.ReadSqlTextFromFile("UpdateComment.sql");
                 command.Parameters.Add("commentText", OracleDbType.Varchar2, ParameterDirection.Input);
                 command.Parameters.Add("id", OracleDbType.Int32, ParameterDirection.Input);
                 command.Parameters[0].Value = comment;

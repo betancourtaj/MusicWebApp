@@ -13,22 +13,22 @@
         </u>
     </div>
     <div>
-        @foreach(var song in Model.Songs)
+        @if(Model.Songs != null)
         {
-            <div class="song-container text-light">
-                <div class="song-contianer-subsection">
-                    <p>@song.SongID</p>
+            @foreach(var song in Model.Songs)
+            {
+                <div class="song-container text-light">
+                    <div class="song-contianer-subsection">
+                        <p>@song.Title</p>
+                    </div>
+                    <div class="song-contianer-subsection">
+                        <p>@song.ReleaseDate</p>
+                    </div>
+                    <div class="song-contianer-subsection">
+                        <p>@song.AlbumName</p>
+                    </div>
                 </div>
-                <div class="song-contianer-subsection">
-                    <p>@song.Title</p>
-                </div>
-                <div class="song-contianer-subsection">
-                    <p>@song.ReleaseDate</p>
-                </div>
-                <div class="song-contianer-subsection">
-                    <p>@song.AlbumName</p>
-                </div>
-            </div>
+            }
         }
     </div>
     <div class="comment-container text-light">
@@ -37,53 +37,43 @@
             @foreach(var comment in Model.Comments)
             {
                 <div class="comment">
-                    <div class="comment-header">
-                        <div class="comment-user">
-                            <p>@comment.Username</p>
-                        </div>
-                        @if(comment.UserID == @HttpContextAccessor.HttpContext.Session.GetInt32("UserID"))
+                    @if(@HttpContextAccessor.HttpContext.Session.GetString("IsEditMode") == "TRUE"
+                    && @HttpContextAccessor.HttpContext.Session.GetInt32("UserID") == comment.UserID)
+                    {
+                        @using (Html.BeginForm("OnPostSubmit", "ViewPlaylist", FormMethod.Post))
                         {
-                            @if(@HttpContextAccessor.HttpContext.Session.GetString("IsEditMode") == "FALSE")
-                            {
-                                @using (Html.BeginForm("OnPostEdit", "ViewPlaylist", FormMethod.Post))
-                                {
-                                    <div style="float: right;" class="text-light">
-                                        <input type="submit" id="comment-edit" asp-page-handler="Edit" value="Edit" class="comment-edit-button"/>
-                                    </div>
-                                }
-                            }
-                            else
-                            {
-                                @using (Html.BeginForm("OnPostSubmit", "ViewPlaylist", FormMethod.Post))
-                                {
-                                    <div style="float: right;" class="text-light">
-                                        <input type="submit" id="comment-submit" asp-page-handler="Submit" value="Submit" class="comment-edit-button" disabled="disabled"/>
-                                    </div>
-                                }
-                            }
+                            <textarea hidden="hidden" id="comment-id-texta" name="comment-id-texta">@comment.CommentID</textarea>
+                            <div class="comment-header" id="comment-id" name="comment-id" value=@comment.CommentID>
+                                <div class="comment-user">
+                                    <p id="myComment1" name="myComment1">User: @comment.Username</p>
+                                </div>
+                                <div style="float: right;" class="text-light">
+                                    <input type="submit" id="comment-submit" asp-page-handler="Submit" value="Submit" class="comment-edit-button" disabled="disabled"/>
+                                </div>
+                            </div>
+                            <textarea id="commentText" name="commentText" class="mm_comment-textbox"></textarea>
                         }
-                        <!-- if same user as comment user -->
-                        <!-- <div class="comment-edit-button"></div> -->
-                    </div>
-                        @if(@HttpContextAccessor.HttpContext.Session.GetString("IsEditMode") == "FALSE")
+                    }
+                    else
+                    {
+                        @using (Html.BeginForm("OnPostEdit", "ViewPlaylist", FormMethod.Post))
                         {
+                            <div class="comment-header" id="comment-id" name="comment-id" value=@comment.CommentID>
+                                <div class="comment-user">
+                                    <p id="myComment2" name="myComment2">User: @comment.Username</p>
+                                </div>
+                                @if(@HttpContextAccessor.HttpContext.Session.GetInt32("UserID") == comment.UserID)
+                                {
+                                    <div style="float: right;" class="text-light">
+                                        <input type="submit" id="comment-edit" asp-page-handler="Edit" value="Edit" class="comment-edit-button" name=@comment.CommentID/>
+                                    </div>
+                                }
+                            </div>
                             <div class="comment-text">
-                                <p>@comment.Text</p>
+                                <p id="comment-id-text">@comment.Text</p>
                             </div>
                         }
-                        else
-                        {
-                            @if(comment.UserID == @HttpContextAccessor.HttpContext.Session.GetInt32("UserID"))
-                            {
-                                <textarea id="commentText" name="commentText" class="mm_comment-textbox"></textarea>
-                            }
-                            else
-                            {
-                                <div class="comment-text">
-                                    <p>@comment.Text</p>
-                                </div>
-                            }
-                        }
+                    }
                 </div>
             }
         }
