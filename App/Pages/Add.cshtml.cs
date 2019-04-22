@@ -47,11 +47,34 @@ namespace App.Pages
         {
             if(ModelState.IsValid)
             {
-                HasSelectedAlbum = true;
-                Album = albumButton;
+                if(albumButton == null || albumButton == String.Empty) return RedirectToPage("./Add");
+
+                Session = HttpContext.Session;
+                Albums = MusicDataBase.GetAlbumsForArtist(Session.GetInt32("UserID"));
+
+                if(IsAlbumValid(albumButton))
+                {
+                    HasSelectedAlbum = true;
+                    Album = albumButton;
+                    return Page();
+                }
+
                 return Page();
             }
             return RedirectToPage("./Error");
+        }
+
+        private bool IsAlbumValid(string albumButton)
+        {
+            foreach(var v in Albums)
+            {
+                if(v.Equals(albumButton))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public IActionResult OnPostAddSong()

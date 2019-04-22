@@ -34,7 +34,7 @@ namespace App.Pages
             PlaylistName = playlist;
             Session.SetString("PlaylistName", PlaylistName);
 
-            GetSongsAndComments();
+            QuerySongsAndComments();
 
             string[] playlists = MusicDataBase.GetPlaylistNamesForUserID(UserID);
             if(playlists != null && !playlists.Contains(playlist))
@@ -43,10 +43,10 @@ namespace App.Pages
             }
         }
 
-        private void GetSongsAndComments()
+        private void QuerySongsAndComments()
         {
-            Songs = MusicDataBase.GetSongsFromPlaylist(UserID, PlaylistName);
-            Comments = MusicDataBase.GetCommentsForPlaylist(UserID, PlaylistName);
+            Songs = MusicDataBase.GetSongsFromPlaylist((int) Session.GetInt32("PlaylistUserID"), Session.GetString("PlaylistName"));
+            Comments = MusicDataBase.GetCommentsForPlaylist((int) Session.GetInt32("PlaylistUserID"), Session.GetString("PlaylistName"));
         }
 
         public IActionResult OnPostEdit(string data)
@@ -55,7 +55,7 @@ namespace App.Pages
             {
                 Session = HttpContext.Session;
                 Session.SetString("IsEditMode", "TRUE");
-                GetSongsAndComments();
+                QuerySongsAndComments();
                 return Redirect($"./ViewPlaylist?userId={Session.GetInt32("PlaylistUserID")}&playlist={Session.GetString("PlaylistName")}");
             }
             
@@ -69,12 +69,49 @@ namespace App.Pages
                 Session = HttpContext.Session;
                 Session.SetString("IsEditMode", "FALSE");
                 string commentString = Request.Form["commentText"];
-                string commentid = Request.Form["comment-id-texta"];
-                GetSongsAndComments();
-                MusicDataBase.ChangeComment(commentString, Convert.ToInt32(commentid));
-                return Redirect($"./ViewPlaylist?userId={Session.GetInt32("PlaylistUserID")}&playlist={Session.GetString("PlaylistName")}");
+
+                int commentid = 0;
+                try {
+                    commentid = Convert.ToInt32(Request.Form["comment-id-texta"]);
+                } catch (InvalidCastException e)
+                {
+                    Console.WriteLine("Incorrect type of id" + e.Message);
+                    return Page();
+                }
+
+                QuerySongsAndComments();
+
+                if(IsValidCommentID(commentid))
+                {
+                    MusicDataBase.ChangeComment(commentString, commentid);
+                    return Redirect($"./ViewPlaylist?userId={Session.GetInt32("PlaylistUserID")}&playlist={Session.GetString("PlaylistName")}");
+                }
+
+                return Page();
             }
             return RedirectToPage("./Error");
+        }
+
+        private bool IsValidCommentID(int commentid)
+        {
+            Comment foundComment = null;
+            foreach(var v in Comments)
+            {
+                if(v.CommentID == commentid)
+                {
+                    foundComment = v;
+                    break;
+                }
+            }
+
+            if(foundComment == null) return false;
+
+            if(foundComment.UserID == Session.GetInt32("UserID"))
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }
