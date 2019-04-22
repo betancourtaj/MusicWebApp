@@ -447,6 +447,33 @@ namespace App
             Close();
         }
 
+        public static int FindArtistIDFromAlbumID(int albumID) {
+            Connect();
+            int artistID = 0;
+
+            OracleCommand command = connection.CreateCommand();
+            try {
+                connection.Open();
+                command.BindByName = true;
+
+                command.CommandText = Constants.ReadSqlTextFromFile("GetArtistFromAlbumID.sql");
+                command.Parameters.Add("albumid", OracleDbType.Int32, ParameterDirection.Input);
+                command.Parameters[0].Value = albumID;
+
+                artistID =  ReadSingleInt(command);
+            
+                Close();
+                return artistID;
+            }
+            catch (OracleException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            Close();
+            return -1;
+        }
+
         public static int FindArtistID(int songID) 
         {
             Connect();
@@ -458,7 +485,7 @@ namespace App
                 command.BindByName = true;
 
                 command.CommandText = Constants.ReadSqlTextFromFile("GetArtistFromSongID.sql");
-                command.Parameters.Add("songid", OracleDbType.Varchar2, ParameterDirection.Input);
+                command.Parameters.Add("songid", OracleDbType.Int32, ParameterDirection.Input);
                 command.Parameters[0].Value = songID;
 
                 artistID =  ReadSingleInt(command);
@@ -473,6 +500,38 @@ namespace App
 
             Close();
             return -1;
+        }
+
+        public static string[] GetSearchResultsUsers(string data) {
+            Connect();
+
+            OracleCommand command = connection.CreateCommand();
+            try {
+                connection.Open();
+                command.BindByName = true;
+
+                command.CommandText = Constants.ReadSqlTextFromFile("GetUsersForUsernameLike.sql");
+                command.Parameters.Add("dataString", OracleDbType.Varchar2, ParameterDirection.Input);
+                command.Parameters[0].Value = data;
+
+                string[] users = Read(command);
+
+                if(users == null)
+                {
+                    Close();
+                    return null;
+                }
+
+                Close();
+                return users;
+            }
+            catch (OracleException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            Close();
+            return null;
         }
 
         public static Song[] GetSearchResultsSong(string data)
@@ -691,6 +750,34 @@ namespace App
                 command.Parameters[3].Value = albumID;
                 command.Parameters[4].Value = artistID;
                 command.Parameters[5].Value = songID;
+
+                command.ExecuteNonQuery();
+                Close();
+            }
+            catch (OracleException e)
+            {
+                Console.WriteLine($"AddSong Error: {e.Message}");
+            }
+
+            Close();
+        }
+
+        public static void AddSongToPlaylist(int songID, int playlistID) 
+        {
+            Connect();
+
+            OracleCommand command = connection.CreateCommand();
+            try {
+                connection.Open();
+                command.BindByName = true;
+
+                command.CommandText = Constants.ReadSqlTextFromFile("AddSong.sql");
+                //command.CommandType = CommandType.StoredProcedure;
+
+                command.Parameters.Add("songID", OracleDbType.Int32, ParameterDirection.Input);
+                command.Parameters.Add("playlistID", OracleDbType.Int32, ParameterDirection.Input);
+                command.Parameters[0].Value = songID;
+                command.Parameters[1].Value = playlistID;
 
                 command.ExecuteNonQuery();
                 Close();

@@ -1,0 +1,1 @@
+Select artistid from p_artist_album where ablumid = :albumid

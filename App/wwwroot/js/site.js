@@ -8,6 +8,13 @@ var songsArray;
 var bioCharacterCount;
 var commentCharacterCount;
 
+var playlists;
+
+$(function () {
+    
+})
+
+
 
 /*$("#searchBar").keyup(function() {
     searchString = this.value;

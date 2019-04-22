@@ -21,6 +21,8 @@ namespace App.Pages
         [BindProperty]
         public string[] Albums { get; set; }
         [BindProperty]
+        public string[] Users { get; set; }
+        [BindProperty]
         public string[] Playlists { get; private set; }
         [BindProperty]
         public int PageUserID { get; private set; }
@@ -33,15 +35,10 @@ namespace App.Pages
 
         private ISession Session;
 
-        public void OnPost(string data)
-        {
-
-            Console.WriteLine($"Post: {data}");
-        }
-
         public void OnPostSearch() {
             SearchString = Request.Form["search-bar"];
             Albums = MusicDataBase.GetSearchResultsAlbum(SearchString);
+            Users = MusicDataBase.GetSearchResultsUsers(SearchString);
             Songs = MusicDataBase.GetSearchResultsSong(SearchString);
             if (Songs != null){
                 for (int i=0; i<Songs.Length; i++) {
@@ -50,12 +47,27 @@ namespace App.Pages
                     ArtistNames.Add(artistName);
                 }
             }
+
+            Session = HttpContext.Session;
+            PageUserID = (int) Session.GetInt32("UserID");
+            Playlists = MusicDataBase.GetPlaylistNamesForUserID(PageUserID);
         }
 
-        public void OnPostDisplayPlaylist(string userId) {
-            Session = HttpContext.Session;
-            PageUserID = Convert.ToInt32((string) userId);
-            Playlists = MusicDataBase.GetPlaylistNamesForUserID(PageUserID);
+        public void OnPostAdd() {
+            string playlistName = Request.Form["playlistDisplay"];
+            
+        }
+
+        public IActionResult OnPostViewPlaylist(string viewPlaylist)
+        {
+            if(ModelState.IsValid)
+            {
+                Session = HttpContext.Session;
+                Session.SetString("IsEditMode", "FALSE");
+
+                return Redirect($"./ViewPlaylist?userId={Session.GetInt32("PlaylistUserID")}&playlist={viewPlaylist}");
+            }
+            return RedirectToPage("./Error");
         }
 
         public IActionResult OnGet(string data)
