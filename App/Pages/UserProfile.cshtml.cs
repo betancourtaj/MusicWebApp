@@ -69,13 +69,35 @@ namespace App.Pages
         {
             if(ModelState.IsValid)
             {
+                if(viewPlaylist == null || viewPlaylist == String.Empty) return Page();
                 Session = HttpContext.Session;
                 Session.SetString("IsEditMode", "FALSE");
 
-                return Redirect($"./ViewPlaylist?userId={Session.GetInt32("PlaylistUserID")}&playlist={viewPlaylist}");
+                Playlists = MusicDataBase.GetPlaylistNamesForUserID((int) Session.GetInt32("UserID"));
+
+                if(IsValidPlaylist(viewPlaylist))
+                {
+                    return Redirect($"./ViewPlaylist?userId={Session.GetInt32("PlaylistUserID")}&playlist={viewPlaylist}");
+                }
+
+                return Page();
             }
             return RedirectToPage("./Error");
         }
+
+        private bool IsValidPlaylist(string viewPlaylist)
+        {
+            foreach(var v in Playlists)
+            {
+                if(v.Equals(viewPlaylist))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public IActionResult OnPostCreateNewPlaylist()
         {
             if(ModelState.IsValid)
