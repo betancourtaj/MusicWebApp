@@ -91,10 +91,10 @@
                             <tr>
                                 @using (Html.BeginForm("DisplayPlaylist", "SearchSongModel", FormMethod.Post))
                                 {
-                                <td>@Model.Songs[i].Title</td>
-                                <td>@Model.Songs[i].AlbumName</td>
-                                <td>@Model.ArtistNames[i]</td>
-                                <td>@Model.Songs[i].ReleaseDate</td>
+                                    <td>@Model.Songs[i].Title</td>
+                                    <td>@Model.Songs[i].AlbumName</td>
+                                    <td>@Model.ArtistNames[i]</td>
+                                    <td>@Model.Songs[i].ReleaseDate</td>
                                     @if (@HttpContextAccessor.HttpContext.Session.GetString("IsLoggedIn") != null) 
                                     {
                                         <td>
