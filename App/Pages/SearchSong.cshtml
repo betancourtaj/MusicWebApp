@@ -29,32 +29,6 @@
         </div>
         <!-- If searched for something then draw table below-->
         <div>
-            <table class="display-table text-center text-light">
-                <tr class="text-center">
-                    <th>Title</th>
-                    <th>Album</th>
-                    <th>Artist</th>
-                    <th>Date</th>
-                    <th>Add</th>
-                </tr>
-                <tr>
-
-                    <td>DNA</th>
-                    <td>DAMN.</th>
-                    <td>Kendrick Lamar</th>
-                    <td>10/12/2005</th>
-                    <td>
-                        <div class="dropdown">
-                            <button class="dropdown-button">Playlist</button>
-                            <div class="dropdown-content text-light">
-                                <a href="./Index" class="text-light">Playlist1</a>
-                                <a small>Playlist2</a>
-                                <a small>Playlist3</a>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-            </table>
 
             @if (Model.Songs != null)
             {
@@ -72,6 +46,48 @@
                 }
             }
 
+            @if(Model.Songs != null && Model.ArtistNames != null)
+            {
+                <h2 class="display-4 text-light">Songs</h2>
+                @for(int i = 0; i < Model.Songs.Length; i++)
+                {
+                    @using(Html.BeginForm("OnPostAddSongPress", "AddSong", FormMethod.Post))
+                    {
+                        <div class="listing-container">
+                            <textarea id="song-id" hidden="hidden" value=Model.Songs[i].SongID/>
+                            <div class="song-title">
+                                Model.Songs[i].Title
+                            </div>
+                            <div class="song-album">
+                                Model.Songs[i].AlbumName
+                            </div>
+                            <div class="song-artist">
+                                Model.ArtistNames[i]
+                            </div>
+                            <div class="song-date">
+                                Model.Songs[i].ReleaseDate
+                            </div>
+                            <div>
+                                <input class="mm_button" id="add-song-button" name="add-song-button" asp-page-handler="AddSongPress" />
+                            </div>
+                        </div>
+                    }
+                }
+            }
+
+            <!-- Do same as above for album and playlist (May need to create playlist model object and album model object to get id) -->
+
+
+
+
+
+
+
+
+
+
+
+            <!-- Alex Below -->
             @if (Model.Songs != null)
                 {
                     <h2 class="display-4 text-light">Songs</h2>
