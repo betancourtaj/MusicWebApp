@@ -762,6 +762,37 @@ namespace App
             Close();
         }
 
+        public static int GetPlaylistIDForPlaylistNameAndUserID(string playlistName, int userId) {
+            Connect();
+            
+            int playlistID = -1;
+
+            OracleCommand command = connection.CreateCommand();
+            try {
+                connection.Open();
+                command.BindByName = true;
+
+                command.CommandText = Constants.ReadSqlTextFromFile("GetPlaylistIDForPlaylistNameAndUserID.sql");
+                command.Parameters.Add("playlistName", OracleDbType.Varchar2, ParameterDirection.Input);
+                command.Parameters.Add("userId", OracleDbType.Varchar2, ParameterDirection.Input);
+                command.Parameters[0].Value = playlistName;
+                command.Parameters[1].Value = userId;
+
+
+                playlistID =  ReadSingleInt(command);
+            
+                Close();
+                return playlistID;
+            }
+            catch (OracleException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            Close();
+            return -1;
+        }
+
         public static void AddSongToPlaylist(int songID, int playlistID) 
         {
             Connect();

@@ -1,1 +1,1 @@
-insert into p_song_playlist ()
+insert into p_playlist_song (playlistid, songid) values (:songID, :playlistID)

@@ -27,7 +27,7 @@ namespace App.Pages
         [BindProperty]
         public int PageUserID { get; private set; }
         [BindProperty]
-        string SearchString { get; set; }
+        public string SearchString { get; set; }
         [BindProperty(SupportsGet = true)]
         public string[] SearchResults { get; set; }
         [BindProperty(SupportsGet = true)]
@@ -35,27 +35,68 @@ namespace App.Pages
 
         private ISession Session;
 
-        public void OnPostSearch() {
+        public void OnPostSearch() 
+        {
             SearchString = Request.Form["search-bar"];
-            Albums = MusicDataBase.GetSearchResultsAlbum(SearchString);
-            Users = MusicDataBase.GetSearchResultsUsers(SearchString);
-            Songs = MusicDataBase.GetSearchResultsSong(SearchString);
-            if (Songs != null){
-                for (int i=0; i<Songs.Length; i++) {
+            Session = HttpContext.Session;
+            Session.SetString("SearchString", SearchString);
+            getData(SearchString);
+            if (Songs != null)
+            {
+                getArtistData();
+            }
+
+            if(Session.GetString("IsLoggedIn") == "TRUE")
+            {
+                PageUserID = (int) Session.GetInt32("UserID");
+                Playlists = MusicDataBase.GetPlaylistNamesForUserID(PageUserID);
+            }
+        }
+
+        private void getData(string searchString) 
+        {
+            Albums = MusicDataBase.GetSearchResultsAlbum(searchString);
+            Users = MusicDataBase.GetSearchResultsUsers(searchString);
+            Songs = MusicDataBase.GetSearchResultsSong(searchString);
+        }
+
+        private void getArtistData() 
+        {
+            for (int i=0; i<Songs.Length; i++) 
+                {
                     int artistId = MusicDataBase.FindArtistID(Songs[i].SongID);
                     string artistName = MusicDataBase.GetUserNameForID(artistId);
                     ArtistNames.Add(artistName);
                 }
-            }
+        }
+
+        //needs fixing
+        public void OnPostAdd() 
+        {
+            Session = HttpContext.Session;
+            SearchString = Session.GetString("SearchString");
+            string playlistName = Request.Form["playlistDisplay"];
 
             Session = HttpContext.Session;
             PageUserID = (int) Session.GetInt32("UserID");
-            Playlists = MusicDataBase.GetPlaylistNamesForUserID(PageUserID);
+
+            int playlistID = MusicDataBase.GetPlaylistIDForPlaylistNameAndUserID(playlistName, PageUserID);
+            //int songID = FindSongID(songName, artistName, albumName);
+            //MusicDataBase.AddSongToPlaylist(songID, playlistID);
         }
 
-        public void OnPostAdd() {
-            string playlistName = Request.Form["playlistDisplay"];
-            
+        private int FindSongID(string songName, string artistName, string albumName) 
+        {
+            int songId = -1;
+            for (int i=0; i < Songs.Length; i++)
+            {
+                if (string.Equals(songName, Songs[i].Title) && string.Equals(albumName, Songs[i].AlbumName) 
+                    && string.Equals(artistName, ArtistNames[i]) )
+                    {
+                        songId = Songs[i].SongID;
+                    }
+            }
+            return songId;
         }
 
         public IActionResult OnPostViewPlaylist(string viewPlaylist)

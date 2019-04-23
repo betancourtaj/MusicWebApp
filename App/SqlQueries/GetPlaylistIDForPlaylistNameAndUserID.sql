@@ -1,0 +1,1 @@
+Select playlistid From p_playlist Where title = :playlistName and userid = :userId

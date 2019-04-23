@@ -12,7 +12,11 @@
     <div class="text-center text-light">
         <h1 class="display-4 text-light">Search</h1>
             @using (Html.BeginForm("SearchEverything", "Search", FormMethod.Post)) {
-                <input type="text" id="searchBar" class="search-bar" name="search-bar" placeholder="Search..." autocomplete="off"/>
+                @if (Model.SearchString != null){
+                    <input type="text" id="searchBar" class="search-bar" name="search-bar" value=@Model.SearchString autocomplete="off"/>
+                } else {
+                    <input type="text" id="searchBar" class="search-bar" name="search-bar" placeholder="Search..." autocomplete="off"/>
+                }
                 <div class="search-bar-content text-light">
                     <!-- -->
                 </div>
@@ -53,6 +57,22 @@
             </table>
 
             @if (Model.Songs != null)
+            {
+                <h2 class="display-4 text-light">Songs</h2>
+                @for (int i=0; i<Model.Songs.Length; i++)
+                {
+                    <div>
+                        @using (Html.BeginForm("Add", "SearchSongModel", FormMethod.Post)) 
+                        {
+                            <div class="songTitle">
+                                
+                            </div>
+                        }
+                    </div>
+                }
+            }
+
+            @if (Model.Songs != null)
                 {
                     <h2 class="display-4 text-light">Songs</h2>
                     <table class="display-table text-center text-light">
@@ -61,35 +81,38 @@
                             <th>Album</th>
                             <th>Artist</th>
                             <th>Date</th>
-                            <th>Add</th>
+                            @if (@HttpContextAccessor.HttpContext.Session.GetString("IsLoggedIn") != null)
+                            {
+                                <th>Add</th>
+                            }
                         </tr>
                         @for (int i=0; i<Model.Songs.Length; i++)
                         {
                             <tr>
-                                <td name="songName">@Model.Songs[i].Title</td>
-                                <td>@Model.Songs[i].AlbumName</td>
-                                <td name="artistName">@Model.ArtistNames[i]</td>
-                                <td>@Model.Songs[i].ReleaseDate</td>
-                                <!-- Displays playlists for user. Needs fixing -->
-                                @if (@HttpContextAccessor.HttpContext.Session.GetString("IsLoggedIn") != null) 
+                                @using (Html.BeginForm("DisplayPlaylist", "SearchSongModel", FormMethod.Post))
                                 {
-                                    <td>
-                                        <div class="dropdown">
-                                            <button class="dropdown-button">Playlist</button>
-                                            <div class="dropdown-content text-light">
-                                            @using (Html.BeginForm("DisplayPlaylist", "SearchSongModel", FormMethod.Post))
-                                            {
-                                                @if (Model.Playlists != null) 
-                                                {
-                                                    @foreach(var playlist in Model.Playlists)
+                                <td>@Model.Songs[i].Title</td>
+                                <td>@Model.Songs[i].AlbumName</td>
+                                <td>@Model.ArtistNames[i]</td>
+                                <td>@Model.Songs[i].ReleaseDate</td>
+                                    @if (@HttpContextAccessor.HttpContext.Session.GetString("IsLoggedIn") != null) 
+                                    {
+                                        <td>
+                                            <div class="dropdown">
+                                                <button class="dropdown-button">Playlist</button>
+                                                <div class="dropdown-content text-light">
+                                                    @if (Model.Playlists != null) 
                                                     {
-                                                        <input class="mm_button" type="submit" name="playlistDisplay" asp-page-handler="Add" value=@playlist/>
+                                                        @foreach(var playlist in Model.Playlists)
+                                                        {
+                                                            <!-- The ability to fetch the current song data that's added to the playlist needs fixing -->
+                                                            <input class="mm_button" type="submit" name="playlistDisplay" asp-page-handler="Add" value=@playlist/>
+                                                        }
                                                     }
-                                                }
-                                            }
+                                                </div>
                                             </div>
-                                        </div>
-                                    </td>
+                                        </td>
+                                    }
                                 }
                             </tr>
                         }
