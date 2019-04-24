@@ -19,7 +19,7 @@ namespace App.Pages
         [BindProperty]
         public string[] Albums { get; set; }
         [BindProperty]
-        public string[] Users { get; set; }
+        public User[] Users { get; set; }
         [BindProperty]
         public Playlist[] searchPlaylists {get; set;}
         [BindProperty]
@@ -154,9 +154,8 @@ namespace App.Pages
                 Session.SetString("IsEditMode", "FALSE");
                 //add checks
                 int userIdToView = Convert.ToInt32(Request.Form["user-id"]);
-                string viewPlaylist = Request.Form["view-playlist-button"];
 
-                return Redirect($"./ViewPlaylist?userId={userIdToView}&playlist={viewPlaylist}");
+                return Redirect($"./UserProfile?userId={userIdToView}");
             }
             return RedirectToPage("./Error");
         }

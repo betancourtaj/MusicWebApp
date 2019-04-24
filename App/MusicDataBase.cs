@@ -535,7 +535,7 @@ namespace App
             return null;
         }
 
-        public static string[] GetSearchResultsUsers(string data) {
+        public static User[] GetSearchResultsUsers(string data) {
             Connect();
 
             OracleCommand command = connection.CreateCommand();
@@ -547,7 +547,7 @@ namespace App
                 command.Parameters.Add("dataString", OracleDbType.Varchar2, ParameterDirection.Input);
                 command.Parameters[0].Value = data;
 
-                string[] users = Read(command);
+                User[] users = ReadUserArray(command);
 
                 if(users == null)
                 {
@@ -598,6 +598,27 @@ namespace App
 
             Close();
             return null;
+        }
+
+        private static User[] ReadUserArray(OracleCommand command)
+        {
+            List<User> userList = new List<User>();
+
+            OracleDataReader reader = command.ExecuteReader();
+
+            while(reader.Read())
+            {
+                if(!reader.IsDBNull(0))
+                {
+                    userList.Add(new User(reader.GetInt32(0), reader.GetString(1), reader.GetString(2) ));
+                }
+            }
+            reader.Dispose();
+
+            if(userList.Count == 0)
+            return null;
+
+            return userList.ToArray();
         }
 
         private static Playlist[] ReadPlaylistArray(OracleCommand command)

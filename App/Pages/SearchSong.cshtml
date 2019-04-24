@@ -116,15 +116,14 @@
             @if(Model.Users != null)
             {
                 <h2 class="display-4 text-light">Users</h2>
-                @for(int i = 0; i < Model.Users.Length; i++)
+                @foreach(var user in Model.Users)
                 {
-                    @using(Html.BeginForm("OnPostAddSongPress", "AddSong", FormMethod.Post))
+                    @using(Html.BeginForm("OnPostViewProfile", "ViewProfile", FormMethod.Post))
                     {
                         <div class="listing-container">
-                            <textarea id="song-id" name="album-id" hidden="hidden"></textarea>
+                            <textarea id="user-id" name="user-id" hidden="hidden">@user.UserID</textarea>
                             <div class="username">
-                                <!-- need this to take you to users profile -->
-                                @Model.Users[i]
+                                <input class="mm_button" type="submit" id="view-profile-button" name="view-profile-button" asp-page-handler="ViewProfile" value=@user.Username />
                             </div>
                         </div>
                     }
