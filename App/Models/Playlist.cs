@@ -1,18 +1,21 @@
+<<<<<<< HEAD
 using System;
 
+=======
+>>>>>>> c0174c89e2e241a727cc4f41400a4b7402c208b5
 namespace App.Models
 {
     public class Playlist
     {
-        public int ID { get; private set; }
-        public string Title { get; private set; }
-        public int UserID { get; private set; }
+        public int PlaylistId {get; private set;}
+        public string PlaylistTitle {get; private set;}
+        public int UserId {get; private set;}
 
-        public Playlist(int id, string title, int userid)
+        public Playlist(int playlistId, string playlistTitle, int userId)
         {
-            ID = id;
-            Title = title;
-            UserID = userid;
+            PlaylistId = playlistId;
+            PlaylistTitle = playlistTitle;
+            UserId = userId;
         }
     }
 }

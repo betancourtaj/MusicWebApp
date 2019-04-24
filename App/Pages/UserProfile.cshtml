@@ -9,6 +9,7 @@
     var IsEditBioMode = @HttpContextAccessor.HttpContext.Session.GetString("IsEditMode");
     var SessionUserID = @HttpContextAccessor.HttpContext.Session.GetInt32("UserID");
     var IsSameUser = Model.PageUserID == SessionUserID;
+    var IsArtist = @HttpContextAccessor.HttpContext.Session.GetString("CurrentPageIsArtist");
 }
 
 <div class="user-container text-light">
@@ -46,6 +47,34 @@
         <div>
         </div>
     </div>
+    <!-- Need to display artist albums if the page is an artist page -->
+    @if(IsArtist == "True")
+    {
+        <div class="artist-content">
+            <div class="artist-header">
+                <div>
+                    <u>
+                        <h1>@Model.Username's Albums:</h1>
+                    </u>
+                </div>
+            </div>
+        </div>
+
+        <div class="user-content-container">
+            @if(Model.Albums != null)
+            {
+                <!-- Put FOREACH loop here to loop through albums -->
+                @foreach(var album in Model.Albums)
+                {
+                    @using (Html.BeginForm("OnPostViewAlbum", "UserProfileModel", FormMethod.Post))
+                    {
+                        <input type="submit" id="viewAlbum" name="viewAlbum" asp-page-handler="ViewAlbum" class="playlist-container text-light" value=@album.AlbumTitle />
+                    }
+                }
+            }
+        </div>
+    }
+
     <div class="user-content">
         <div class="user-header">
             <div>

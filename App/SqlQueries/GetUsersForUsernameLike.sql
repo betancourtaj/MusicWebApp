@@ -1,1 +1,1 @@
-select username from p_user where username like concat(concat('%', :dataString), '%')
+select userid, email, username from p_user where username like concat(concat('%', :dataString), '%')
