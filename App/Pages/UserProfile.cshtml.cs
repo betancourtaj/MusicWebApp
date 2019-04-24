@@ -100,7 +100,7 @@ namespace App.Pages
         {
             foreach(var v in Playlists)
             {
-                if(v.Title.Equals(viewPlaylist))
+                if(v.PlaylistTitle.Equals(viewPlaylist))
                 {
                     return true;
                 }

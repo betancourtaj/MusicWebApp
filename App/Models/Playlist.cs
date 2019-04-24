@@ -1,8 +1,5 @@
-<<<<<<< HEAD
 using System;
 
-=======
->>>>>>> c0174c89e2e241a727cc4f41400a4b7402c208b5
 namespace App.Models
 {
     public class Playlist

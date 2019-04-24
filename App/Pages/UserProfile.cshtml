@@ -106,7 +106,7 @@
                 {
                     @using (Html.BeginForm("OnPostSubmitEditedBio", "UserProfileModel", FormMethod.Post))
                     {
-                        <input type="submit" id="viewPlaylist" name="viewPlaylist" asp-page-handler="ViewPlaylist" class="playlist-container text-light" value=@playlist.Title/>
+                        <input type="submit" id="viewPlaylist" name="viewPlaylist" asp-page-handler="ViewPlaylist" class="playlist-container text-light" value=@playlist.PlaylistTitle/>
                     }
                 }
             }
