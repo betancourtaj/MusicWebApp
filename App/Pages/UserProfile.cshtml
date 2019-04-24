@@ -102,11 +102,11 @@
             @if(Model.Playlists != null)
             {
                 <!-- Put FOREACH loop here to loop through playlists -->
-                @foreach(var title in Model.Playlists)
+                @foreach(var playlist in Model.Playlists)
                 {
                     @using (Html.BeginForm("OnPostSubmitEditedBio", "UserProfileModel", FormMethod.Post))
                     {
-                        <input type="submit" id="viewPlaylist" name="viewPlaylist" asp-page-handler="ViewPlaylist" class="playlist-container text-light" value=@title/>
+                        <input type="submit" id="viewPlaylist" name="viewPlaylist" asp-page-handler="ViewPlaylist" class="playlist-container text-light" value=@playlist.PlaylistTitle/>
                     }
                 }
             }

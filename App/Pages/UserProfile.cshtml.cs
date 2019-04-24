@@ -16,7 +16,7 @@ namespace App.Pages
         public string Username { get; private set; }
 
         [BindProperty]
-        public string[] Playlists { get; private set; }
+        public Playlist[] Playlists { get; private set; }
 
         [BindProperty]
         public string Bio { get; private set; }
@@ -43,7 +43,7 @@ namespace App.Pages
                 if(usrName != null)
                 {
                     Username = usrName;
-                    Playlists = MusicDataBase.GetPlaylistNamesForUserID(PageUserID);
+                    Playlists = MusicDataBase.GetPlaylistsForUser(PageUserID);
                     Bio = MusicDataBase.GetBioForUserID(PageUserID);
                 }
 
@@ -64,7 +64,7 @@ namespace App.Pages
                     Username = Session.GetString("SessionUser");
                     PageUserID = (int) Session.GetInt32("UserID");
                     Session.SetInt32("PlaylistUserID", PageUserID);
-                    Playlists = MusicDataBase.GetPlaylistNamesForUserID((int) Session.GetInt32("UserID"));
+                    Playlists = MusicDataBase.GetPlaylistsForUser((int) Session.GetInt32("UserID"));
                     Bio = MusicDataBase.GetBioForUserID((int) Session.GetInt32("UserID"));
                 }
                 else
@@ -84,7 +84,7 @@ namespace App.Pages
                 Session = HttpContext.Session;
                 Session.SetString("IsEditMode", "FALSE");
 
-                Playlists = MusicDataBase.GetPlaylistNamesForUserID((int) Session.GetInt32("UserID"));
+                Playlists = MusicDataBase.GetPlaylistsForUser((int) Session.GetInt32("UserID"));
 
                 if(IsValidPlaylist(viewPlaylist))
                 {
@@ -100,7 +100,7 @@ namespace App.Pages
         {
             foreach(var v in Playlists)
             {
-                if(v.Equals(viewPlaylist))
+                if(v.PlaylistTitle.Equals(viewPlaylist))
                 {
                     return true;
                 }
@@ -135,7 +135,7 @@ namespace App.Pages
                 Session.SetString("IsEditMode", "TRUE");
                 Username = Session.GetString("SessionUser");
                 PageUserID = (int) Session.GetInt32("UserID");
-                Playlists = MusicDataBase.GetPlaylistNamesForUserID((int) Session.GetInt32("UserID"));
+                Playlists = MusicDataBase.GetPlaylistsForUser((int) Session.GetInt32("UserID"));
                 Bio = MusicDataBase.GetBioForUserID((int) Session.GetInt32("UserID"));
                 return Page();
             }
@@ -159,7 +159,7 @@ namespace App.Pages
                 }
                 Username = Session.GetString("SessionUser");
                 PageUserID = (int) Session.GetInt32("UserID");
-                Playlists = MusicDataBase.GetPlaylistNamesForUserID((int) Session.GetInt32("UserID"));
+                Playlists = MusicDataBase.GetPlaylistsForUser((int) Session.GetInt32("UserID"));
                 Bio = MusicDataBase.GetBioForUserID((int) Session.GetInt32("UserID"));
                 return Page();
             }

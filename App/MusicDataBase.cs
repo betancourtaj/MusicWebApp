@@ -16,6 +16,39 @@ namespace App
             connection = new OracleConnection(Constants.ConnectionString);
         }
 
+        public static Playlist[] GetPlaylistsForUser(int userid)
+        {
+            Connect();
+
+            OracleCommand command = connection.CreateCommand();
+            try {
+                connection.Open();
+                command.BindByName = true;
+
+                command.CommandText = Constants.ReadSqlTextFromFile("GetAllPlaylistsForUser.sql");
+                command.Parameters.Add("id", OracleDbType.Int32, ParameterDirection.Input);
+                command.Parameters[0].Value = userid;
+
+                Playlist[] comments = ReadPlaylists(command);
+
+                if(comments != null)
+                {
+                    Close();
+                    return comments;
+                }
+
+                Close();
+                return null;
+            }
+            catch (OracleException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            Close();
+            return null;
+        }
+
         public static Comment[] GetCommentsForPlaylist(int userid, string playlist)
         {
             Connect();
@@ -69,6 +102,27 @@ namespace App
             return null;
 
             return commentList.ToArray();
+        }
+
+        private static Playlist[] ReadPlaylists(OracleCommand command)
+        {
+            List<Playlist> playlistList = new List<Playlist>();
+
+            OracleDataReader reader = command.ExecuteReader();
+
+            while(reader.Read())
+            {
+                if(!reader.IsDBNull(0))
+                {
+                    playlistList.Add(new Playlist(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2)));
+                }
+            }
+            reader.Dispose();
+
+            if(playlistList.Count == 0)
+            return null;
+
+            return playlistList.ToArray();
         }
 
         public static string GetBioForUserID(int userid)

@@ -70,6 +70,7 @@ namespace App.Pages
                 {
                     int artistId = MusicDataBase.FindArtistID(Songs[i].SongID);
                     string artistName = MusicDataBase.GetUserNameForID(artistId);
+                    ArtistNames = new List<string>();
                     ArtistNames.Add(artistName);
                 }
         }
