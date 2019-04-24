@@ -802,13 +802,13 @@ namespace App
                 connection.Open();
                 command.BindByName = true;
 
-                command.CommandText = Constants.ReadSqlTextFromFile("AddSong.sql");
+                command.CommandText = Constants.ReadSqlTextFromFile("AddSongToPlaylist.sql");
                 //command.CommandType = CommandType.StoredProcedure;
 
-                command.Parameters.Add("songID", OracleDbType.Int32, ParameterDirection.Input);
                 command.Parameters.Add("playlistID", OracleDbType.Int32, ParameterDirection.Input);
-                command.Parameters[0].Value = songID;
-                command.Parameters[1].Value = playlistID;
+                command.Parameters.Add("songID", OracleDbType.Int32, ParameterDirection.Input);
+                command.Parameters[0].Value = playlistID;
+                command.Parameters[1].Value = songID;
 
                 command.ExecuteNonQuery();
                 Close();
