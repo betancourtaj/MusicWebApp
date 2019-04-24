@@ -52,10 +52,7 @@ namespace App.Pages
                     Session.SetString("CurrentPageIsArtist", "TRUE");
                     Albums = MusicDataBase.GetAlbumsFromArtistID(PageUserID);
                 }
-                else
-                {
-                    Response.Redirect("./Index");
-                }
+
             }
             else
             {
