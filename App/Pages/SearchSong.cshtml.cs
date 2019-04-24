@@ -13,8 +13,6 @@ namespace App.Pages
     {
 
         [BindProperty]
-        public string[] Test { get ; set; } = new string[] { "1", "2", "3" };
-        [BindProperty]
         public Song[] Songs { get; set; }
         [BindProperty]
         public List<string> ArtistNames { get; set; }
@@ -23,15 +21,13 @@ namespace App.Pages
         [BindProperty]
         public string[] Users { get; set; }
         [BindProperty]
-        public string[] Playlists { get; private set; }
+        public Playlist[] searchPlaylists {get; set;}
+        [BindProperty]
+        public string[] CurrentUsersPlaylists { get; private set; }
         [BindProperty]
         public int PageUserID { get; private set; }
         [BindProperty]
         public string SearchString { get; set; }
-        [BindProperty(SupportsGet = true)]
-        public string[] SearchResults { get; set; }
-        [BindProperty(SupportsGet = true)]
-        public string[] SearchKeys { get; set; }
 
         private ISession Session;
 
@@ -49,7 +45,7 @@ namespace App.Pages
             if(Session.GetString("IsLoggedIn") == "TRUE")
             {
                 PageUserID = (int) Session.GetInt32("UserID");
-                Playlists = MusicDataBase.GetPlaylistNamesForUserID(PageUserID);
+                CurrentUsersPlaylists = MusicDataBase.GetPlaylistNamesForUserID(PageUserID);
             }
         }
 
@@ -58,6 +54,7 @@ namespace App.Pages
             Albums = MusicDataBase.GetSearchResultsAlbum(searchString);
             Users = MusicDataBase.GetSearchResultsUsers(searchString);
             Songs = MusicDataBase.GetSearchResultsSong(searchString);
+            searchPlaylists = MusicDataBase.GetSearchResultsPlaylists(searchString);
         }
 
         private void getArtistData() 
@@ -70,7 +67,6 @@ namespace App.Pages
                 }
         }
 
-        //needs fixing
         public IActionResult OnPostAdd() 
         {
             if(ModelState.IsValid)
@@ -111,9 +107,9 @@ namespace App.Pages
         {
             Session = HttpContext.Session;
             PageUserID = (int) Session.GetInt32("UserID");
-            Playlists = MusicDataBase.GetPlaylistNamesForUserID(PageUserID);
+            CurrentUsersPlaylists = MusicDataBase.GetPlaylistNamesForUserID(PageUserID);
 
-            foreach(var playlist in Playlists)
+            foreach(var playlist in CurrentUsersPlaylists)
             {
                 if( string.Equals(playlistName, playlist) )
                     return true;
@@ -135,38 +131,44 @@ namespace App.Pages
             return false;
         }
 
-        public IActionResult OnPostViewPlaylist(string viewPlaylist)
+        public IActionResult OnPostViewPlaylist()
         {
             if(ModelState.IsValid)
             {
                 Session = HttpContext.Session;
                 Session.SetString("IsEditMode", "FALSE");
+                //add checks
+                int userIdToView = Convert.ToInt32(Request.Form["user-id"]);
+                string viewPlaylist = Request.Form["view-playlist-button"];
 
-                return Redirect($"./ViewPlaylist?userId={Session.GetInt32("PlaylistUserID")}&playlist={viewPlaylist}");
+                return Redirect($"./ViewPlaylist?userId={userIdToView}&playlist={viewPlaylist}");
             }
             return RedirectToPage("./Error");
         }
 
-        public IActionResult OnGet(string data)
+        public IActionResult OnPostViewProfile()
         {
-            var results = MusicDataBase.GetSearchResults(data);
-            SearchResults = results.Keys.ToArray();
-            SearchKeys = results.Values.ToArray();
-            //SearchString = data;
-            Console.WriteLine($"My: {data}");
-            return Page();
+            if(ModelState.IsValid)
+            {
+                Session = HttpContext.Session;
+                Session.SetString("IsEditMode", "FALSE");
+                //add checks
+                int userIdToView = Convert.ToInt32(Request.Form["user-id"]);
+                string viewPlaylist = Request.Form["view-playlist-button"];
+
+                return Redirect($"./ViewPlaylist?userId={userIdToView}&playlist={viewPlaylist}");
+            }
+            return RedirectToPage("./Error");
         }
 
-        public IActionResult OnPostGetAlbumArray()
+
+        public Boolean isValidUserId(int userId)
         {
-            Console.WriteLine("CALLED ALBUMS");
-            return new JsonResult(SearchResults);
+            return false;
         }
 
-        public IActionResult OnPostGetSongArray()
-        {
-            Console.WriteLine("CALLED SONGS");
-            return new JsonResult(SearchKeys);
+        public Boolean isValidPlaylistForUserId(int userId, string playlistName){
+            return false;
         }
     }
 }

@@ -502,6 +502,39 @@ namespace App
             return -1;
         }
 
+        public static Playlist[] GetSearchResultsPlaylists(string data)
+        {
+            Connect();
+
+            OracleCommand command = connection.CreateCommand();
+            try {
+                connection.Open();
+                command.BindByName = true;
+
+                command.CommandText = Constants.ReadSqlTextFromFile("GetPlaylistForTitleLike.sql");
+                command.Parameters.Add("dataString", OracleDbType.Varchar2, ParameterDirection.Input);
+                command.Parameters[0].Value = data;
+
+                Playlist[] playlists = ReadPlaylistArray(command);
+
+                if(playlists == null)
+                {
+                    Close();
+                    return null;
+                }
+
+                Close();
+                return playlists;
+            }
+            catch (OracleException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            Close();
+            return null;
+        }
+
         public static string[] GetSearchResultsUsers(string data) {
             Connect();
 
@@ -565,6 +598,27 @@ namespace App
 
             Close();
             return null;
+        }
+
+        private static Playlist[] ReadPlaylistArray(OracleCommand command)
+        {
+            List<Playlist> playlistList = new List<Playlist>();
+
+            OracleDataReader reader = command.ExecuteReader();
+
+            while(reader.Read())
+            {
+                if(!reader.IsDBNull(0))
+                {
+                    playlistList.Add(new Playlist(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2) ));
+                }
+            }
+            reader.Dispose();
+
+            if(playlistList.Count == 0)
+            return null;
+
+            return playlistList.ToArray();
         }
 
         private static Song[] ReadSongArray(OracleCommand command)
