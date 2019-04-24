@@ -1,0 +1,1 @@
+select a.albumid, a.title, a.releasedate from p_artist_album aa, p_album a where aa.artistid = :artistId and aa.albumid = a.albumid

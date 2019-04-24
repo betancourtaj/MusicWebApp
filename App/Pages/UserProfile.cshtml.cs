@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Http;
+using App.Models;
 
 namespace App.Pages
 {
@@ -23,6 +24,9 @@ namespace App.Pages
         [BindProperty]
         public int PageUserID { get; private set; }
 
+        [BindProperty]
+        public Album[] Albums { get; private set; }
+
         private ISession Session;
 
         public void OnGet(string userId)
@@ -33,6 +37,7 @@ namespace App.Pages
             {
                 PageUserID = Convert.ToInt32((string) userId);
                 string usrName = MusicDataBase.GetUserNameForID(PageUserID);
+                Boolean isArtist = MusicDataBase.UserIsArtist( Session.GetInt32("UserID") );
                 Session.SetInt32("PlaylistUserID", PageUserID);
 
                 if(usrName != null)
@@ -40,6 +45,12 @@ namespace App.Pages
                     Username = usrName;
                     Playlists = MusicDataBase.GetPlaylistNamesForUserID(PageUserID);
                     Bio = MusicDataBase.GetBioForUserID(PageUserID);
+                }
+
+                if(isArtist)
+                {
+                    Session.SetString("CurrentPageIsArtist", "TRUE");
+                    Albums = MusicDataBase.GetAlbumsFromArtistID(PageUserID);
                 }
                 else
                 {

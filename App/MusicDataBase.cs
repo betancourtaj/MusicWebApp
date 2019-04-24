@@ -358,38 +358,6 @@ namespace App
             return null;
         }
 
-        public static Dictionary<string, string> GetSearchResults(string data)
-        {
-            if(data == null) return new Dictionary<string, string>();
-
-            Dictionary<string, string> results = new Dictionary<string, string>();
-
-            string[] albums = GetSearchResultsAlbum(data);
-            Song[] songs = GetSearchResultsSong(data);
-
-            if(albums != null) 
-            {
-                foreach(string name in albums)
-                {
-                    results.Add(name, "Album");
-                }
-            }
-            if(songs != null)
-            {
-                foreach(var name in songs)
-                {
-                    results.Add(name.Title, "Song");
-                }
-            }
-
-            if(albums == null && songs == null)
-            {
-                return new Dictionary<string, string>();
-            }
-            // TODO: ADD PLAYLIST SEARCH
-            return results;
-        }
-
         internal static void ChangeBio(string bio, int? userid)
         {
             if(bio == null) return;
@@ -472,6 +440,39 @@ namespace App
 
             Close();
             return -1;
+        }
+
+        public static Album[] GetAlbumsFromArtistID(int artistId)
+        {
+            Connect();
+
+            OracleCommand command = connection.CreateCommand();
+            try {
+                connection.Open();
+                command.BindByName = true;
+
+                command.CommandText = Constants.ReadSqlTextFromFile("GetAlbumsFromArtistID.sql");
+                command.Parameters.Add("artistid", OracleDbType.Int32, ParameterDirection.Input);
+                command.Parameters[0].Value = artistId;
+
+                Album[] albums = ReadAlbumArray(command);
+
+                if(albums == null)
+                {
+                    Close();
+                    return null;
+                }
+
+                Close();
+                return albums;
+            }
+            catch (OracleException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            Close();
+            return null;
         }
 
         public static int FindArtistID(int songID) 
@@ -600,6 +601,39 @@ namespace App
             return null;
         }
 
+        public static Album[] GetSearchResultsAlbum(string data)
+        {
+            Connect();
+
+            OracleCommand command = connection.CreateCommand();
+            try {
+                connection.Open();
+                command.BindByName = true;
+
+                command.CommandText = Constants.ReadSqlTextFromFile("GetAlbumForTitleLike.sql");
+                command.Parameters.Add("dataString", OracleDbType.Varchar2, ParameterDirection.Input);
+                command.Parameters[0].Value = data;
+                
+                Album[] albumArray = ReadAlbumArray(command);
+
+                if(albumArray == null)
+                {
+                    Close();
+                    return null;
+                }
+
+                Close();
+                return albumArray;
+            }
+            catch (OracleException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            Close();
+            return null;
+        }
+
         private static User[] ReadUserArray(OracleCommand command)
         {
             List<User> userList = new List<User>();
@@ -663,37 +697,25 @@ namespace App
             return songList.ToArray();
         }
 
-        public static string[] GetSearchResultsAlbum(string data)
+        private static Album[] ReadAlbumArray(OracleCommand command)
         {
-            Connect();
+            List<Album> albumList = new List<Album>();
 
-            OracleCommand command = connection.CreateCommand();
-            try {
-                connection.Open();
-                command.BindByName = true;
+            OracleDataReader reader = command.ExecuteReader();
 
-                command.CommandText = Constants.ReadSqlTextFromFile("GetAlbumForTitleLike.sql");
-                command.Parameters.Add("dataString", OracleDbType.Varchar2, ParameterDirection.Input);
-                command.Parameters[0].Value = data;
-                
-                string[] array = Read(command);
-
-                if(array == null)
-                {
-                    Close();
-                    return null;
-                }
-
-                Close();
-                return array;
-            }
-            catch (OracleException e)
+            while(reader.Read())
             {
-                Console.WriteLine(e.Message);
+                if(!reader.IsDBNull(0))
+                {
+                    albumList.Add(new Album(reader.GetInt32(0), reader.GetString(1), reader.GetString(2) ));
+                }
             }
+            reader.Dispose();
 
-            Close();
+            if(albumList.Count == 0)
             return null;
+
+            return albumList.ToArray();
         }
 
         public static void AddAlbum(string albumName, int? artistID, string releaseDate)

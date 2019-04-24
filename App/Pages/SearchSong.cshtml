@@ -96,15 +96,15 @@
             @if(Model.Albums != null)
             {
                 <h2 class="display-4 text-light">Albums</h2>
-                @for(int i = 0; i < Model.Albums.Length; i++)
+                @foreach(var album in Model.Albums)
                 {
                     @using(Html.BeginForm("OnPostAddSongPress", "AddSong", FormMethod.Post))
                     {
                         <div class="listing-container">
-                            <textarea id="song-id" name="album-id" hidden="hidden"></textarea>
+                            <textarea id="album-id" name="album-id" hidden="hidden">@album.AlbumTitle</textarea>
                             <div class="album-name">
                                 <!-- need this to take you to the users album -->
-                                @Model.Albums[i]
+                                <input class="mm_button" type="submit" id="view-album-button" name="view-album-button" asp-page-handler="ViewAlbum" value=@album.AlbumTitle />
                             </div>
                         </div>
                     }

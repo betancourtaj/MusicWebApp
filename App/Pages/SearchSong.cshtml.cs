@@ -13,19 +13,26 @@ namespace App.Pages
     {
 
         [BindProperty]
-        public Song[] Songs { get; set; }
+        public Song[] Songs { get; private set; }
+
         [BindProperty]
-        public List<string> ArtistNames { get; set; }
+        public List<string> ArtistNames { get; private set; }
+
         [BindProperty]
-        public string[] Albums { get; set; }
+        public Album[] Albums { get; private set; }
+
         [BindProperty]
-        public User[] Users { get; set; }
+        public User[] Users { get; private set; }
+
         [BindProperty]
-        public Playlist[] searchPlaylists {get; set;}
+        public Playlist[] searchPlaylists {get; private set;}
+
         [BindProperty]
         public string[] CurrentUsersPlaylists { get; private set; }
+
         [BindProperty]
         public int PageUserID { get; private set; }
+
         [BindProperty]
         public string SearchString { get; set; }
 
