@@ -1,0 +1,1 @@
+delete from p_playlist_song where playlistid = :pid and songid = :sid

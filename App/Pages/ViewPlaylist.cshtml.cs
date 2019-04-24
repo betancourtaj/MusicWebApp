@@ -92,6 +92,20 @@ namespace App.Pages
             return RedirectToPage("./Error");
         }
 
+        public IActionResult OnDeleteSong()
+        {
+            if(ModelState.IsValid)
+            {
+                Session = HttpContext.Session;
+
+                QuerySongsAndComments();
+
+                
+            }
+
+            return Page();
+        }
+
         private bool IsValidCommentID(int commentid)
         {
             Comment foundComment = null;
@@ -113,5 +127,7 @@ namespace App.Pages
 
             return false;
         }
+
+        
     }
 }
