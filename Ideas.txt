@@ -1,21 +1,9 @@
-AddSong:
---------
-- Add song to playlist
-    - Create div for playlists, using same buttons just with playlist names
-    - same form as albums form but with playlist instead of album.
+Create Playlist Page
 
-Comments:
-----------
-- Add comments to bottom of ViewPlaylist page
-    - Create comment "div" including commentor name, visit page button and 
-        the actual text itself.
-    - If your comment add edit comment button.
+Search make pretty
 
-Search:
--------
-Black magic
+Delete songs from album and comments from album
 
-Create playlist:
-----------------
-Query database for playlist by that user with the same name, if it exists do not allow them to create that playlist.
+when click on album from search page direct to ViewAlbum page.
 
+Add album to playlist

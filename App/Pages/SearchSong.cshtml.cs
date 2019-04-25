@@ -66,11 +66,11 @@ namespace App.Pages
 
         private void getArtistData() 
         {
+            ArtistNames = new List<string>();
             for (int i=0; i<Songs.Length; i++) 
                 {
                     int artistId = MusicDataBase.FindArtistID(Songs[i].SongID);
                     string artistName = MusicDataBase.GetUserNameForID(artistId);
-                    ArtistNames = new List<string>();
                     ArtistNames.Add(artistName);
                 }
         }
