@@ -27,6 +27,8 @@ namespace App.Pages
         [BindProperty]
         public Album[] Albums { get; private set; }
 
+        private int AlbumChosenID;
+
         private ISession Session;
 
         public void OnGet(string userId)
@@ -37,40 +39,44 @@ namespace App.Pages
             {
                 PageUserID = Convert.ToInt32((string) userId);
                 string usrName = MusicDataBase.GetUserNameForID(PageUserID);
-                Boolean isArtist = MusicDataBase.UserIsArtist( Session.GetInt32("UserID") );
                 Session.SetInt32("PlaylistUserID", PageUserID);
+                Session.SetInt32("AlbumUserID", PageUserID);
 
                 if(usrName != null)
                 {
                     Username = usrName;
+                    Session.SetString("PageUserName", Username);
                     Playlists = MusicDataBase.GetPlaylistsForUser(PageUserID);
                     Bio = MusicDataBase.GetBioForUserID(PageUserID);
                 }
 
-                if(isArtist)
+                if(Session.GetString("IsArtist") == "TRUE")
                 {
-                    Session.SetString("CurrentPageIsArtist", "TRUE");
                     Albums = MusicDataBase.GetAlbumsFromArtistID(PageUserID);
                 }
-
             }
             else
             {
                 if(Session.GetString("IsLoggedIn") != null)
                 {
-                    Username = Session.GetString("SessionUser");
                     PageUserID = (int) Session.GetInt32("UserID");
                     Session.SetInt32("PlaylistUserID", PageUserID);
+                    Session.SetInt32("AlbumUserID", PageUserID);
+                    Username = Session.GetString("SessionUser");
+                    Session.SetString("PageUserName", Username);
                     Playlists = MusicDataBase.GetPlaylistsForUser((int) Session.GetInt32("UserID"));
                     Bio = MusicDataBase.GetBioForUserID((int) Session.GetInt32("UserID"));
+
+                    if(Session.GetString("IsArtist") == "TRUE")
+                    {
+                        Albums = MusicDataBase.GetAlbumsFromArtistID(PageUserID);
+                    }
                 }
                 else
                 {
                     Response.Redirect("./Index");
                 }
             }
-            
-            // TODO: Query here for playlists using username!
         }
 
         public IActionResult OnPostViewPlaylist(string viewPlaylist)
@@ -81,7 +87,7 @@ namespace App.Pages
                 Session = HttpContext.Session;
                 Session.SetString("IsEditMode", "FALSE");
 
-                Playlists = MusicDataBase.GetPlaylistsForUser((int) Session.GetInt32("UserID"));
+                Playlists = MusicDataBase.GetPlaylistsForUser((int) Session.GetInt32("PlaylistUserID"));
 
                 if(IsValidPlaylist(viewPlaylist))
                 {
@@ -91,6 +97,41 @@ namespace App.Pages
                 return Page();
             }
             return RedirectToPage("./Error");
+        }
+
+        public IActionResult OnPostViewAlbum(string viewAlbum)
+        {
+            if(ModelState.IsValid)
+            {
+                if(viewAlbum == null || viewAlbum == string.Empty) return Page();
+                Session = HttpContext.Session;
+                Session.SetString("IsEditMode", "FALSE");
+
+                Albums = MusicDataBase.GetAlbumsFromArtistID((int) Session.GetInt32("AlbumUserID"));
+
+                if(IsValidAlbum(viewAlbum))
+                {
+                    return Redirect($"./ViewAlbum?userId={Session.GetInt32("AlbumUserID")}&album={viewAlbum}&albumId={AlbumChosenID}");
+                }
+
+                return Page();
+            }
+
+            return RedirectToPage("./Error");
+        }
+
+        private bool IsValidAlbum(string viewAlbum)
+        {
+            foreach(var v in Albums)
+            {
+                if(v.AlbumTitle.Equals(viewAlbum))
+                {
+                    AlbumChosenID = v.AlbumID;
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private bool IsValidPlaylist(string viewPlaylist)

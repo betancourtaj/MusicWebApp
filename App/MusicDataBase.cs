@@ -49,6 +49,38 @@ namespace App
             return null;
         }
 
+        internal static Song[] GetSongsFromAlbum(int albumid)
+        {
+            Connect();
+            OracleCommand command = connection.CreateCommand();
+            try {
+                connection.Open();
+                command.BindByName = true;
+
+                command.CommandText = Constants.ReadSqlTextFromFile("GetSongsFromAlbum.sql");
+                command.Parameters.Add("id", OracleDbType.Int32, ParameterDirection.Input);
+                command.Parameters[0].Value = albumid;
+
+                Song[] songs = ReadSongArray(command);
+
+                if(songs != null)
+                {
+                    Close();
+                    return songs;
+                }
+
+                Close();
+                return null;
+            }
+            catch(OracleException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            Close();
+            return null;
+        }
+
         public static Comment[] GetCommentsForPlaylist(int userid, string playlist)
         {
             Connect();
@@ -195,8 +227,6 @@ namespace App
             Close();
             return null;
         }
-
-
 
         internal static int[] GetSongIDsFromPlaylist(int id, string playlist)
         {

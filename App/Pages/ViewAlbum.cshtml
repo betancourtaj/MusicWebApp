@@ -1,0 +1,32 @@
+﻿@page
+@model App.Pages.ViewAlbumModel
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+}
+
+<div class="view-playlist-content">
+    <div class="playlist-title text-light">
+        <u>
+            <h1 class="display-4">@Model.AlbumName by @Model.ArtistName</h1>
+        </u>
+    </div>
+
+    <div>
+        @if(Model.Songs != null)
+        {
+            @foreach(var song in Model.Songs)
+            {
+                <div class="song-container text-light">
+                    <div class="album-song-contianer-subsection">
+                        <p>@song.Title</p>
+                    </div>
+                    <div class="album-song-contianer-subsection">
+                        <p>@song.ReleaseDate</p>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
