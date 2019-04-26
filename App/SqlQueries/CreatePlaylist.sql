@@ -1,0 +1,1 @@
+insert into p_playlist values (addPlaylistSequence.nextval, :title, :id)

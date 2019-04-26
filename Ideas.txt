@@ -1,5 +1,1 @@
-Delete songs from playlist and delete playlist entirely.
-
-Add album to playlist
-
 Search make pretty

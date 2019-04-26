@@ -61,7 +61,7 @@
             <div style="float: right;">
                 @using (Html.BeginForm("OnPostSubmitEditedBio", "UserProfileModel", FormMethod.Post))
                 {
-                    <input type="submit" asp-page-handler="CreateNewPlaylist" class="mm_button" value="Create New"/>
+                    <input type="submit" asp-page-handler="CreateNewPlaylist" class="mm_button" value="Create Playlist"/>
                 }
             </div>
             <div style="float: right;">
@@ -102,20 +102,19 @@
                     </u>
                 </div>
             </div>
-        </div>
-
-        <div class="user-content-container">
-            @if(Model.Albums != null)
-            {
-                <!-- Put FOREACH loop here to loop through albums -->
-                @foreach(var album in Model.Albums)
+            <div class="user-content-container">
+                @if(Model.Albums != null)
                 {
-                    @using (Html.BeginForm("OnPostViewAlbum", "UserProfileModel", FormMethod.Post))
+                    <!-- Put FOREACH loop here to loop through albums -->
+                    @foreach(var album in Model.Albums)
                     {
-                        <input type="submit" id="viewAlbum" name="viewAlbum" asp-page-handler="ViewAlbum" class="playlist-container text-light" value=@album.AlbumTitle />
+                        @using (Html.BeginForm("OnPostViewAlbum", "UserProfileModel", FormMethod.Post))
+                        {
+                            <input type="submit" id="viewAlbum" name="viewAlbum" asp-page-handler="ViewAlbum" class="playlist-container text-light" value=@album.AlbumTitle />
+                        }
                     }
                 }
-            }
+            </div>
         </div>
     }
 </div>

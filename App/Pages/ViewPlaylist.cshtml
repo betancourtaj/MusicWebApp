@@ -4,17 +4,33 @@
 @inject IHttpContextAccessor HttpContextAccessor
 
 @{
+    var SessionUserID = @HttpContextAccessor.HttpContext.Session.GetInt32("UserID");
+    var IsSameUser = Model.PageUserID == SessionUserID;
 }
 
 <div class="view-playlist-content">
     <div class="playlist-title text-light">
         <u>
             <h1 class="display-4">@Model.PlaylistName</h1>
+            <h3>by @Model.ArtistName</h3>
         </u>
+        @if(IsSameUser)
+        {
+            @using (Html.BeginForm("OnPostDelete", "ViewPlaylistModel", FormMethod.Post))
+            {
+                <input type="submit" class="mm_button" asp-page-handler="DeletePlaylist" value="Delete Playlist"/>
+            }
+        }
     </div>
     <div>
         @if(Model.Songs != null)
         {
+            <table class="text-light view-table">
+                <th>Title</th>
+                <th>ReleaseDate</th>
+                <th>Album</th>
+                <th>Delete Song</th>
+            </table>
             @foreach(var song in Model.Songs)
             {
                 <div class="song-container text-light">
@@ -27,6 +43,14 @@
                     <div class="song-contianer-subsection">
                         <p>@song.AlbumName</p>
                     </div>
+                    @if(IsSameUser)
+                    {
+                        @using(Html.BeginForm("OnPostDeleteSong", "ViewPlaylistModel", FormMethod.Post))
+                        {
+                            <textarea hidden="hidden" id="song-id" name="song-id">@song.SongID</textarea>
+                            <input type="submit" class="delete-button song-contianer-subsection text-light" asp-page-handler="DeleteSong" value="Delete Song"/>
+                        }
+                    }
                 </div>
             }
         }

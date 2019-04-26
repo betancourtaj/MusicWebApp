@@ -27,6 +27,8 @@ namespace App.Pages
         [BindProperty]
         public Album[] Albums { get; private set; }
 
+        public int PlaylistChosenID { get; private set; }
+
         private int AlbumChosenID;
 
         private ISession Session;
@@ -91,7 +93,7 @@ namespace App.Pages
 
                 if(IsValidPlaylist(viewPlaylist))
                 {
-                    return Redirect($"./ViewPlaylist?userId={Session.GetInt32("PlaylistUserID")}&playlist={viewPlaylist}");
+                    return Redirect($"./ViewPlaylist?userId={Session.GetInt32("PlaylistUserID")}&playlist={viewPlaylist}&playlistid={PlaylistChosenID}");
                 }
 
                 return Page();
@@ -140,6 +142,7 @@ namespace App.Pages
             {
                 if(v.PlaylistTitle.Equals(viewPlaylist))
                 {
+                    PlaylistChosenID = v.PlaylistId;
                     return true;
                 }
             }

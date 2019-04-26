@@ -49,6 +49,33 @@ namespace App
             return null;
         }
 
+        internal static void CreatePlaylist(int v, string playlistTitle)
+        {
+            if(playlistTitle == null || playlistTitle == String.Empty) return;
+
+            Connect();
+            OracleCommand command = connection.CreateCommand();
+            try {
+                connection.Open();
+                command.BindByName = true;
+
+                command.CommandText = Constants.ReadSqlTextFromFile("CreatePlaylist.sql");
+                command.Parameters.Add("title", OracleDbType.Varchar2, ParameterDirection.Input);
+                command.Parameters.Add("id", OracleDbType.Int32, ParameterDirection.Input);
+                command.Parameters[0].Value = playlistTitle;
+                command.Parameters[1].Value = v;
+
+                command.ExecuteNonQuery();
+                Close();
+            }
+            catch(OracleException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            Close();
+        }
+
         internal static Song[] GetSongsFromAlbum(int albumid)
         {
             Connect();
@@ -113,6 +140,55 @@ namespace App
 
             Close();
             return null;
+        }
+
+        internal static void DeleteSongFromPlaylist(int v, int songID)
+        {
+            Connect();
+            OracleCommand command = connection.CreateCommand();
+            try {
+                connection.Open();
+                command.BindByName = true;
+
+                command.CommandText = Constants.ReadSqlTextFromFile("DeleteSongFromPlaylist.sql");
+                command.Parameters.Add("pid", OracleDbType.Int32, ParameterDirection.Input);
+                command.Parameters.Add("sid", OracleDbType.Int32, ParameterDirection.Input);
+                command.Parameters[0].Value = v;
+                command.Parameters[1].Value = songID;
+
+                command.ExecuteNonQuery();
+                Close();
+            }
+            catch(OracleException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            Close();
+        }
+
+        internal static void DeleteEntirePlaylist(int playlistID)
+        {
+            Connect();
+            OracleCommand command = connection.CreateCommand();
+            try {
+                connection.Open();
+                command.BindByName = true;
+
+                command.CommandText = Constants.ReadSqlTextFromFile("DeleteEntirePlaylist.sql");
+                command.Parameters.Add("id", OracleDbType.Int32, ParameterDirection.Input);
+                command.Parameters.Add("id", OracleDbType.Int32, ParameterDirection.Input);
+                command.Parameters[0].Value = playlistID;
+                command.Parameters[1].Value = playlistID;
+
+                command.ExecuteNonQuery();
+                Close();
+            }
+            catch(OracleException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            Close();
         }
 
         private static Comment[] ReadComments(OracleCommand command)

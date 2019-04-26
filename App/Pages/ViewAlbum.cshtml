@@ -4,18 +4,24 @@
 @inject IHttpContextAccessor HttpContextAccessor
 
 @{
+
 }
 
 <div class="view-playlist-content">
     <div class="playlist-title text-light">
         <u>
-            <h1 class="display-4">@Model.AlbumName by @Model.ArtistName</h1>
+            <h1 class="display-4">@Model.AlbumName</h1>
+            <h3>by @Model.ArtistName</h3>
         </u>
     </div>
 
     <div>
         @if(Model.Songs != null)
         {
+            <table class="text-light view-table">
+                <th>Title</th>
+                <th>ReleaseDate</th>
+            </table>
             @foreach(var song in Model.Songs)
             {
                 <div class="song-container text-light">
@@ -24,6 +30,26 @@
                     </div>
                     <div class="album-song-contianer-subsection">
                         <p>@song.ReleaseDate</p>
+                    </div>
+                </div>
+            }
+
+            @if(@HttpContextAccessor.HttpContext.Session.GetString("IsLoggedIn") == "TRUE")
+            {
+                <div class="dropdown">
+                    <button class="dropdown-button" style="width: 100%;">Add to Playlist</button>
+                    <div class="dropdown-content text-light">
+                        @if (Model.UserPlaylists != null) 
+                        {
+                            @foreach(var playlist in Model.UserPlaylists)
+                            {
+                                @using(Html.BeginForm("OnPostAddSongsToPlaylist", "ViewAlbumModel", FormMethod.Post))
+                                {
+                                    <textarea hidden="hidden" id="playlist-id" name="playlist-id">@playlist.PlaylistId</textarea>
+                                    <input class="mm_button" type="submit" asp-page-handler="AddSongsToPlaylist" value=@playlist.PlaylistTitle />
+                                }
+                            }
+                        }
                     </div>
                 </div>
             }

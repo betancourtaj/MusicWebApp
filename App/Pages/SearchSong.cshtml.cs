@@ -43,10 +43,10 @@ namespace App.Pages
             SearchString = Request.Form["search-bar"];
             Session = HttpContext.Session;
             Session.SetString("SearchString", SearchString);
-            getData();
+            GetData();
             if (Songs != null)
             {
-                getArtistData();
+                GetArtistData();
             }
 
             if(Session.GetString("IsLoggedIn") == "TRUE")
@@ -56,7 +56,7 @@ namespace App.Pages
             }
         }
 
-        private void getData() 
+        private void GetData() 
         {
             Session = HttpContext.Session;
             Albums = MusicDataBase.GetSearchResultsAlbum(Session.GetString("SearchString"));
@@ -65,7 +65,7 @@ namespace App.Pages
             searchPlaylists = MusicDataBase.GetSearchResultsPlaylists(Session.GetString("SearchString"));
         }
 
-        private void getArtistData() 
+        private void GetArtistData() 
         {
             ArtistNames = new List<string>();
             for (int i=0; i<Songs.Length; i++) 
@@ -83,16 +83,16 @@ namespace App.Pages
                 Session = HttpContext.Session;
                 SearchString = Session.GetString("SearchString");
                 int songId = -1;
-                getData();
+                GetData();
                 string playlistName = Request.Form["add-song-button"];
 
-                if ( isPlaylist(playlistName) == false )
+                if ( IsPlaylist(playlistName) == false )
                     return Redirect("./SearchSong");
                 
                 try 
                 {
                     songId = Convert.ToInt32(Request.Form["song-id"]);
-                    if(isSongId(songId) == false || songId < 0)
+                    if(IsSongID(songId) == false || songId < 0)
                     {
                         return Redirect("./SearchSong");
                     }
@@ -112,7 +112,7 @@ namespace App.Pages
             return RedirectToPage("./Error");
         }
 
-        private bool isPlaylist(string playlistName) 
+        private bool IsPlaylist(string playlistName) 
         {
             Session = HttpContext.Session;
             PageUserID = (int) Session.GetInt32("UserID");
@@ -127,7 +127,7 @@ namespace App.Pages
             return false;
         }
 
-        private bool isSongId(int songId)
+        private bool IsSongID(int songId)
         {
             foreach(var song in Songs)
             {
@@ -183,7 +183,7 @@ namespace App.Pages
 
             if(ModelState.IsValid)
             {
-                getData();
+                GetData();
 
                 if(IsValidAlbum(albumTitle))
                 {

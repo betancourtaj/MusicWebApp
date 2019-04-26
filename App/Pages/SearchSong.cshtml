@@ -29,35 +29,56 @@
                 <h2 class="display-4 text-light">Songs</h2>
                 @for(int i = 0; i < Model.Songs.Length; i++)
                 {
-                    @using(Html.BeginForm("OnPostAddSongPress", "AddSong", FormMethod.Post))
+                    @if(@HttpContextAccessor.HttpContext.Session.GetString("IsLoggedIn") == "TRUE")
                     {
-                        <div class="listing-container">
-                            <textarea id="song-id" name="song-id" hidden="hidden">@Model.Songs[i].SongID</textarea>
-                            <div class="song-title" name="song-title">
-                                @Model.Songs[i].Title
-                            </div>
-                            <div class="song-album" name="song-album">
-                                @Model.Songs[i].AlbumName
-                            </div>
-                            <div class="song-artist" name="song-artist">
-                                @Model.ArtistNames[i]
-                            </div>
-                            <div class="song-date" name="release-date">
-                                @Model.Songs[i].ReleaseDate
-                            </div>
-                            <div>
-                                <div class="dropdown">
-                                    <button class="dropdown-button">Add to Playlist</button>
-                                    <div class="dropdown-content text-light">
-                                        @if (Model.CurrentUsersPlaylists != null) 
-                                        {
-                                            @foreach(var playlist in Model.CurrentUsersPlaylists)
+                        @using(Html.BeginForm("OnPostAddSongPress", "AddSong", FormMethod.Post))
+                        {
+                            <div class="song-container">
+                                <textarea id="song-id" name="song-id" hidden="hidden">@Model.Songs[i].SongID</textarea>
+                                <div class="search-song-container-subsection" name="song-title">
+                                    @Model.Songs[i].Title
+                                </div>
+                                <div class="search-song-container-subsection" name="song-album">
+                                    @Model.Songs[i].AlbumName
+                                </div>
+                                <div class="search-song-container-subsection" name="song-artist">
+                                    @Model.ArtistNames[i]
+                                </div>
+                                <div class="search-song-container-subsection" name="release-date">
+                                    @Model.Songs[i].ReleaseDate
+                                </div>
+                                <div>
+                                    <div class="dropdown">
+                                        <button class="dropdown-button">Add to Playlist</button>
+                                        <div class="dropdown-content text-light">
+                                            @if (Model.CurrentUsersPlaylists != null) 
                                             {
-                                                <input class="mm_button" type="submit" id="add-song-button" name="add-song-button" asp-page-handler="Add" value=@playlist />
+                                                @foreach(var playlist in Model.CurrentUsersPlaylists)
+                                                {
+                                                    <input class="mm_button" type="submit" id="add-song-button" name="add-song-button" asp-page-handler="Add" value=@playlist />
+                                                }
                                             }
-                                        }
+                                        </div>
                                     </div>
                                 </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="song-container">
+                            <textarea id="song-id" name="song-id" hidden="hidden">@Model.Songs[i].SongID</textarea>
+                            <div class="song-contianer-subsection" name="song-title">
+                                @Model.Songs[i].Title
+                            </div>
+                            <div class="song-contianer-subsection" name="song-album">
+                                @Model.Songs[i].AlbumName
+                            </div>
+                            <div class="song-contianer-subsection" name="song-artist">
+                                @Model.ArtistNames[i]
+                            </div>
+                            <div class="song-contianer-subsection" name="release-date">
+                                @Model.Songs[i].ReleaseDate
                             </div>
                         </div>
                     }

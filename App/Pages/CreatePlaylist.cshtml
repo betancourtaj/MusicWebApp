@@ -2,3 +2,19 @@
 @model App.Pages.CreatePlaylistModel
 @{
 }
+
+<section id="main">
+    <div class="left-floating-div text-light" id="add-playlist-div">
+        <u>
+            <h1>Create Playlist</h1>
+        </u>
+        @using (Html.BeginForm("OnPostSubmitButton", "CreatePlaylistModel", FormMethod.Post))
+        {
+            <div>
+                @Html.Label("Enter a playlist title to create!")
+                @Html.TextBoxFor(Model => Model.PlaylistTitle, new { @type = "text", @class="mm_text", @required="required", @placeholder="Title"})
+                <input class="mm_button" type="submit" asp-page-handler="CreatePlaylist" value="Create"/>
+            </div>
+        }
+    </div>
+</section>

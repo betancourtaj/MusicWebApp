@@ -23,9 +23,15 @@ namespace App.Pages
         [BindProperty]
         public Comment[] Comments { get; private set; }
 
+        [BindProperty]
+        public int PageUserID { get; private set; }
+
+        [BindProperty]
+        public string ArtistName { get; private set; }
+
         private ISession Session;
 
-        public void OnGet(int userId, string playlist)
+        public void OnGet(int userId, string playlist, int playlistid)
         {
             Session = HttpContext.Session;
 
@@ -33,6 +39,14 @@ namespace App.Pages
             Session.SetInt32("PlaylistUserID", UserID);
             PlaylistName = playlist;
             Session.SetString("PlaylistName", PlaylistName);
+            PageUserID = userId;
+            Session.SetInt32("PlaylistID", playlistid);
+            
+            ArtistName = Session.GetString("PageUserName");
+            if(ArtistName == null)
+            {
+                ArtistName = Session.GetString("ArtistName");
+            }
 
             QuerySongsAndComments();
 
@@ -92,8 +106,41 @@ namespace App.Pages
             return RedirectToPage("./Error");
         }
 
-        // TODO: IMPLEMENT ME!
-        public IActionResult OnDeleteSong()
+        public IActionResult OnPostDeleteSong()
+        {
+            if(ModelState.IsValid)
+            {
+                Session = HttpContext.Session;
+
+                int songID = Convert.ToInt32(Request.Form["song-id"]);
+
+                QuerySongsAndComments();
+
+                if(IsValidSong(songID))
+                {
+                    MusicDataBase.DeleteSongFromPlaylist((int) Session.GetInt32("PlaylistID"), songID);
+                    return Redirect($"./ViewPlaylist?userId={Session.GetInt32("PlaylistUserID")}&playlist={Session.GetString("PlaylistName")}");
+                }
+
+                return Redirect($"./ViewPlaylist?userId={Session.GetInt32("PlaylistUserID")}&playlist={Session.GetString("PlaylistName")}");
+            }
+
+            return RedirectToPage("./Error");
+        }
+
+        private bool IsValidSong(int songID)
+        {
+            foreach(var v in Songs)
+            {
+                if(v.SongID == songID)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public IActionResult OnPostDeletePlaylist()
         {
             if(ModelState.IsValid)
             {
@@ -101,10 +148,12 @@ namespace App.Pages
 
                 QuerySongsAndComments();
 
-                
+                MusicDataBase.DeleteEntirePlaylist((int) Session.GetInt32("PlaylistID"));
+
+                return RedirectToPage("./UserProfile");
             }
 
-            return Page();
+            return RedirectToPage("./Error");
         }
 
         private bool IsValidCommentID(int commentid)

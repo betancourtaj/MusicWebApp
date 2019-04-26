@@ -58,6 +58,19 @@ body {
 /* Custom types 
 -----------------------------------*/
 
+.delete-button {
+  width: inherit;
+  text-align: center;
+  border-left: 1px solid white;
+  background-color: #444444;
+}
+
+.view-table {
+  width: 100%;
+  border: 1px solid black;
+  text-align: center;
+}
+
 .song-container {
   background-color: #222222;
   border: 1px solid white;
@@ -69,16 +82,24 @@ body {
   line-height: 60px;
 }
 
+.search-song-container-subsection {
+  float: left;
+  width: 20%;
+  height: inherit;
+  text-align: center;
+  line-height: inherit;
+}
+
 .song-contianer-subsection {
   float: left;
-  width: 33%;
+  width: 25%;
   height: inherit;
   text-align: center;
   line-height: inherit;
 }
 
 .album-song-contianer-subsection {
-  float: left;
+  float: right;
   width: 50%;
   height: inherit;
   text-align: center;
@@ -92,7 +113,7 @@ body {
 
 .user-sidebar {
   width: 20%;
-  height: 700px;
+  height: 100%;
   float: left;
   border-right: 1px solid white;
   margin: 10px;
@@ -100,7 +121,7 @@ body {
 
 .user-content {
   height: 100%;
-  float: left;
+  float: right;
   margin: 10px;
 }
 
@@ -250,9 +271,10 @@ body {
 
 .mm_button {
   width: fit-content;
-  height: 50px;
-  padding: 12px 20px;
+  height: fit-content;
+  padding: 20px;
   margin: 8px;
+  line-height: 25%;
   border-color: black;
   background-color: white;
 }
