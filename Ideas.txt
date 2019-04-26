@@ -1,9 +1,5 @@
-Create Playlist Page
-
-Search make pretty
-
-Delete songs from album and comments from album
-
-when click on album from search page direct to ViewAlbum page.
+Delete songs from playlist and delete playlist entirely.
 
 Add album to playlist
+
+Search make pretty

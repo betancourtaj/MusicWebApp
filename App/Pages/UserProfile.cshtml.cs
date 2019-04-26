@@ -111,7 +111,7 @@ namespace App.Pages
 
                 if(IsValidAlbum(viewAlbum))
                 {
-                    return Redirect($"./ViewAlbum?userId={Session.GetInt32("AlbumUserID")}&album={viewAlbum}&albumId={AlbumChosenID}");
+                    return Redirect($"./ViewAlbum?album={viewAlbum}&albumId={AlbumChosenID}");
                 }
 
                 return Page();

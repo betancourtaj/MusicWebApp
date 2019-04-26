@@ -1,1 +1,1 @@
-Select artistid from p_artist_album where ablumid = :albumid
+select artistid from p_artist_album where albumid = :albumid

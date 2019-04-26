@@ -43,7 +43,7 @@ namespace App.Pages
             SearchString = Request.Form["search-bar"];
             Session = HttpContext.Session;
             Session.SetString("SearchString", SearchString);
-            getData(SearchString);
+            getData();
             if (Songs != null)
             {
                 getArtistData();
@@ -56,12 +56,13 @@ namespace App.Pages
             }
         }
 
-        private void getData(string searchString) 
+        private void getData() 
         {
-            Albums = MusicDataBase.GetSearchResultsAlbum(searchString);
-            Users = MusicDataBase.GetSearchResultsUsers(searchString);
-            Songs = MusicDataBase.GetSearchResultsSong(searchString);
-            searchPlaylists = MusicDataBase.GetSearchResultsPlaylists(searchString);
+            Session = HttpContext.Session;
+            Albums = MusicDataBase.GetSearchResultsAlbum(Session.GetString("SearchString"));
+            Users = MusicDataBase.GetSearchResultsUsers(Session.GetString("SearchString"));
+            Songs = MusicDataBase.GetSearchResultsSong(Session.GetString("SearchString"));
+            searchPlaylists = MusicDataBase.GetSearchResultsPlaylists(Session.GetString("SearchString"));
         }
 
         private void getArtistData() 
@@ -82,7 +83,7 @@ namespace App.Pages
                 Session = HttpContext.Session;
                 SearchString = Session.GetString("SearchString");
                 int songId = -1;
-                getData(SearchString) ;
+                getData();
                 string playlistName = Request.Form["add-song-button"];
 
                 if ( isPlaylist(playlistName) == false )
@@ -111,7 +112,7 @@ namespace App.Pages
             return RedirectToPage("./Error");
         }
 
-        private Boolean isPlaylist(string playlistName) 
+        private bool isPlaylist(string playlistName) 
         {
             Session = HttpContext.Session;
             PageUserID = (int) Session.GetInt32("UserID");
@@ -126,7 +127,7 @@ namespace App.Pages
             return false;
         }
 
-        private Boolean isSongId(int songId)
+        private bool isSongId(int songId)
         {
             foreach(var song in Songs)
             {
@@ -169,12 +170,48 @@ namespace App.Pages
         }
 
 
-        public Boolean isValidUserId(int userId)
+        public bool isValidUserId(int userId)
         {
             return false;
         }
 
-        public Boolean isValidPlaylistForUserId(int userId, string playlistName){
+        public IActionResult OnPostViewSelectedAlbum()
+        {
+            string albumTitle = Request.Form["view-album-button"];
+
+            if(albumTitle == null || albumTitle == String.Empty) return Page();
+
+            if(ModelState.IsValid)
+            {
+                getData();
+
+                if(IsValidAlbum(albumTitle))
+                {
+                    return Redirect($"./ViewAlbum?album={albumTitle}&albumId={Request.Form["album-id"]}");
+                }
+
+                return Page();
+            }
+
+            return RedirectToPage("./Error");
+        }
+
+        private bool IsValidAlbum(string album)
+        {
+            Session = HttpContext.Session;
+            foreach(var v in Albums)
+            {
+                if(v.AlbumTitle.Equals(album))
+                {
+                    Session.SetString("ArtistName", v.ArtistName);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public bool isValidPlaylistForUserId(int userId, string playlistName){
             return false;
         }
     }

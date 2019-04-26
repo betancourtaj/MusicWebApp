@@ -11,26 +11,18 @@
 
     <div class="text-center text-light">
         <h1 class="display-4 text-light">Search</h1>
-            @using (Html.BeginForm("SearchEverything", "Search", FormMethod.Post)) {
+            @using (Html.BeginForm("SearchEverything", "Search", FormMethod.Post)) 
+            {
                 @if (Model.SearchString != null){
                     <input type="text" id="searchBar" class="search-bar" name="search-bar" value=@Model.SearchString autocomplete="off"/>
                 } else {
                     <input type="text" id="searchBar" class="search-bar" name="search-bar" placeholder="Search..." autocomplete="off"/>
                 }
-                <div class="search-bar-content text-light">
-                    <!-- -->
-                </div>
                 <input class="mm_button" type="submit" asp-page-handler="Search" value="Search"/>
             }
 
 
         <p class="text-light" name="content" id="content"></p>
-
-        </div>
-        <!-- If searched for something then draw table below-->
-        <div>
-
-            <!-- Songs -->
 
             @if(Model.Songs != null && Model.ArtistNames != null)
             {
@@ -98,13 +90,12 @@
                 <h2 class="display-4 text-light">Albums</h2>
                 @foreach(var album in Model.Albums)
                 {
-                    @using(Html.BeginForm("OnPostAddSongPress", "AddSong", FormMethod.Post))
+                    @using(Html.BeginForm("OnPostViewSelectedAlbum", "SearchSongModel", FormMethod.Post))
                     {
                         <div class="listing-container">
-                            <textarea id="album-id" name="album-id" hidden="hidden">@album.AlbumTitle</textarea>
+                            <textarea id="album-id" name="album-id" hidden="hidden">@album.AlbumID</textarea>
                             <div class="album-name">
-                                <!-- need this to take you to the users album -->
-                                <input class="mm_button" type="submit" id="view-album-button" name="view-album-button" asp-page-handler="ViewAlbum" value=@album.AlbumTitle />
+                                <input class="mm_button" type="submit" id="view-album-button" name="view-album-button" asp-page-handler="ViewSelectedAlbum" value=@album.AlbumTitle />
                             </div>
                         </div>
                     }

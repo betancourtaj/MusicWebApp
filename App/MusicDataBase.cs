@@ -791,7 +791,7 @@ namespace App
             {
                 if(!reader.IsDBNull(0))
                 {
-                    albumList.Add(new Album(reader.GetInt32(0), reader.GetString(1), reader.GetString(2) ));
+                    albumList.Add(new Album(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), GetUserNameForID(FindArtistIDFromAlbumID(reader.GetInt32(0)))));
                 }
             }
             reader.Dispose();
@@ -801,7 +801,7 @@ namespace App
 
             return albumList.ToArray();
         }
-
+        
         public static void AddAlbum(string albumName, int? artistID, string releaseDate)
         {
             if(artistID == null) return;
