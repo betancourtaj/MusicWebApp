@@ -11,18 +11,46 @@
 @{
     var sessionId = @HttpContextAccessor.HttpContext.Session.GetString("IsLoggedIn");
     var sessionUser = @HttpContextAccessor.HttpContext.Session.GetString("SessionUser");
-    var artistV = @HttpContextAccessor.HttpContext.Session.GetString("IsArtist");
+    var IsArtist = @HttpContextAccessor.HttpContext.Session.GetString("IsArtist");
+    var IsLoggedIn = @HttpContextAccessor.HttpContext.Session.GetString("IsLoggedIn") == "TRUE";
 }
 
 <section id="main">
     <div class="text-center text-light">
         @if(sessionUser != null)
         {
-            <h1 class="display-4">Welcome - @sessionUser - @artistV</h1>
+            <h1 class="display-4">Welcome, @sessionUser!</h1>
         }
         else
         {
             <h1 class="display-4">Welcome</h1>
         }
+    </div>
+    <div style="float: left;" class="text-light">
+        @if(IsArtist != "TRUE" && IsLoggedIn)
+            {
+                <h3>It looks like you are not an artist! Click the Artists tab in the top bar to become one!</h3>
+            }
+            <div stlye="float: left;">
+                <p>
+                    Use the top bar to navigate through the website!
+                </p>
+                <ul>
+                    <li>Home - Brings you back here!</li>
+                    <li>Privacy - Read privacy statement!</li>
+                    <li>Search - Search site for songs, albums and playlists!</li>
+                    @if(!IsLoggedIn)
+                    {
+                        <li>Login - Login to the site!</li>
+                        <li>Register - Register an account on the site!</li>
+                    }
+                    else
+                    {
+                        <li>Add - Add a playlist to the site!</li>
+                        <li>Profile - See your profile!</li>
+                    }
+
+                </ul>
+            </div>
     </div>
 </section>
