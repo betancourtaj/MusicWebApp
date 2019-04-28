@@ -52,15 +52,5 @@ namespace App.Pages
 
             return RedirectToPage("./Error");
         }
-
-        public IActionResult OnPostForgotPassword()
-        {
-            if(ModelState.IsValid)
-            {
-                return RedirectToPage("./ForgotPassword");
-            }
-
-            return RedirectToPage("./Error");
-        }
     }
 }

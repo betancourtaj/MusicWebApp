@@ -12,8 +12,6 @@ namespace App.Pages
 {
     public class RegisterModel : PageModel
     {
-        // TODO: Do double password verification thingy.
-
         [BindProperty]
         public string Email { get; set; }
         [BindProperty]

@@ -1362,30 +1362,6 @@ namespace App
             Close();
         }
 
-        //TODO: implement this 
-        public static void ChangePassword(string email, string username, string newPassword) {
-            Connect();
-
-            OracleCommand command = connection.CreateCommand();
-            try {
-                connection.Open();
-                command.BindByName = true;
-
-                command.CommandText = Constants.ReadSqlTextFromFile("ChangePassword.sql");
-
-                command.Parameters.Add(new OracleParameter("passwd", Constants.HashMe(newPassword)));
-                command.Parameters.Add(new OracleParameter("email", email));
-
-                command.ExecuteNonQuery();
-
-            }
-            catch (OracleException e)
-            {
-                Console.WriteLine(e.Message);
-            }
-            Close();
-        }
-
         public static void ChangeUsername(string email, string newUsername, string password) {
             Connect();
 
