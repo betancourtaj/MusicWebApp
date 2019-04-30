@@ -29,11 +29,35 @@ namespace App.Pages
             if(ModelState.IsValid)
             {
                 Session = HttpContext.Session;
-                MusicDataBase.CreatePlaylist((int) Session.GetInt32("UserID"), PlaylistTitle);
-                return RedirectToPage("./UserProfile");
+
+                string[] playlists = MusicDataBase.GetPlaylistNamesForUserID((int) Session.GetInt32("UserID"));
+
+
+                if(!IsDuplicate(playlists))
+                {
+                    MusicDataBase.CreatePlaylist((int) Session.GetInt32("UserID"), PlaylistTitle);
+                    return RedirectToPage("./UserProfile");
+                }
+
+                return Page();
             }
 
             return RedirectToPage("./Error");
+        }
+
+        private bool IsDuplicate(string[] playlists)
+        {
+            if(playlists == null) return false;
+            
+            foreach(var v in playlists)
+            {
+                if(v.Equals(PlaylistTitle))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }
