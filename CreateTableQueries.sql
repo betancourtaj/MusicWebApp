@@ -1,7 +1,7 @@
 create table p_user 
 (userid number(8) not null,
 bio varchar(50),
-email varchar(20) not null,
+email varchar(20) unique not null,
 username varchar(20) not null,
 passwd varchar(30) not null,
 primary key(userid));

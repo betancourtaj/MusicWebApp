@@ -1,1 +1,0 @@
-select al.title from p_artist_album aa, p_album al where aa.albumid = al.albumid and aa.artistid = :id
