@@ -202,7 +202,7 @@ namespace App.Pages
                 PageUserID = (int) Session.GetInt32("UserID");
                 Playlists = MusicDataBase.GetPlaylistsForUser((int) Session.GetInt32("UserID"));
                 Bio = MusicDataBase.GetBioForUserID((int) Session.GetInt32("UserID"));
-                return Page();
+                return RedirectToPage("./UserProfile");
             }
             return RedirectToPage("./Error");
         }
