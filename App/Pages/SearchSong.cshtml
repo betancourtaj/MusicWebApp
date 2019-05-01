@@ -94,6 +94,7 @@
                 {
                     @using(Html.BeginForm("OnPostViewPlaylist", "ViewPlaylist", FormMethod.Post))
                     {
+                        <textarea hidden="hidden" id="playlist-id">@playlist.PlaylistId</textarea>
                         <div class="listing-container">
                             <textarea id="user-id" name="user-id" hidden="hidden">@playlist.UserId</textarea>
                             <div class="playlist-name">

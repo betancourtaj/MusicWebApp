@@ -96,7 +96,7 @@ namespace App.Pages
                     return Redirect($"./ViewPlaylist?userId={Session.GetInt32("PlaylistUserID")}&playlist={viewPlaylist}&playlistid={PlaylistChosenID}");
                 }
 
-                return Page();
+                return RedirectToPage("./UserProfile");
             }
             return RedirectToPage("./Error");
         }
@@ -116,7 +116,7 @@ namespace App.Pages
                     return Redirect($"./ViewAlbum?album={viewAlbum}&albumId={AlbumChosenID}");
                 }
 
-                return Page();
+                return RedirectToPage("./UserProfile");
             }
 
             return RedirectToPage("./Error");

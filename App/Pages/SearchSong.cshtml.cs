@@ -149,10 +149,30 @@ namespace App.Pages
                 //add checks
                 int userIdToView = Convert.ToInt32(Request.Form["user-id"]);
                 string viewPlaylist = Request.Form["view-playlist-button"];
+                int playlistid = Convert.ToInt32(Request.Form["playlist-id"]);
 
-                return Redirect($"./ViewPlaylist?userId={userIdToView}&playlist={viewPlaylist}");
+                GetData();
+
+                if(IsValidPlaylist(playlistid))
+                {
+                    return Redirect($"./ViewPlaylist?userId={userIdToView}&playlist={viewPlaylist}");
+                }
+
+                return Page();
             }
             return RedirectToPage("./Error");
+        }
+
+        private bool IsValidPlaylist(int playlistID)
+        {
+            foreach(var v in searchPlaylists)
+            {
+                if(v.PlaylistId == playlistID)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public IActionResult OnPostViewProfile()
@@ -177,9 +197,7 @@ namespace App.Pages
 
         public IActionResult OnPostViewSelectedAlbum()
         {
-            string albumTitle = Request.Form["view-album-button"];
-
-            if(albumTitle == null || albumTitle == String.Empty) return Page();
+            int albumTitle = Convert.ToInt32(Request.Form["album-id"]);
 
             if(ModelState.IsValid)
             {
@@ -196,12 +214,12 @@ namespace App.Pages
             return RedirectToPage("./Error");
         }
 
-        private bool IsValidAlbum(string album)
+        private bool IsValidAlbum(int albumid)
         {
             Session = HttpContext.Session;
             foreach(var v in Albums)
             {
-                if(v.AlbumTitle.Equals(album))
+                if(v.AlbumID == albumid)
                 {
                     Session.SetString("ArtistName", v.ArtistName);
                     return true;
